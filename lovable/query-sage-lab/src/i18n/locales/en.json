@@ -1,0 +1,1479 @@
+{
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your account settings and preferences",
+    "appearance": "Appearance",
+    "appearanceDescription": "Customize how SQLSphere looks on your device",
+    "darkMode": "Dark Mode",
+    "darkModeDescription": "Switch between light and dark themes",
+    "language": "Language",
+    "languageDescription": "Choose your preferred language",
+    "dangerZone": "Danger Zone",
+    "dangerZoneDescription": "Irreversible actions",
+    "deleteAccount": "Delete Account",
+    "themeUpdated": "Theme updated",
+    "switchedToMode": "Switched to {{mode}} mode",
+    "dark": "dark",
+    "light": "light",
+    "languageUpdated": "Language updated",
+    "switchedToLanguage": "Switched to {{language}}"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "connections": "Connections",
+    "aiChat": "AI Chat",
+    "visualization": "Visualization",
+    "dataImport": "Data Import",
+    "history": "Query History",
+    "schedules": "Schedules",
+    "dashboards": "Dashboards",
+    "alerts": "Alerts",
+    "docs": "Docs",
+    "profile": "Profile",
+    "logout": "Logout",
+    "loginSignup": "Login / Sign Up"
+  },
+  "profile": {
+    "title": "Profile",
+    "description": "Manage your account settings and subscription",
+    "subscription": "Subscription",
+    "subscriptionDescription": "Manage your subscription plan",
+    "currentPlan": "Current Plan",
+    "managePlan": "Manage Plan",
+    "upgradePlan": "Upgrade Plan"
+  },
+  "common": {
+    "english": "English",
+    "german": "German",
+    "spanish": "Spanish",
+    "italian": "Italian",
+    "french": "French",
+    "portuguese": "Portuguese",
+    "dutch": "Dutch",
+    "japanese": "Japanese",
+    "chinese": "Chinese",
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "new": "New",
+    "view": "View",
+    "close": "Close",
+    "confirm": "Confirm",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "description": "Manage your database connections and AI chat sessions",
+    "totalConnections": "Total Connections",
+    "active": "active",
+    "chatSessions": "Chat Sessions",
+    "activeConversations": "Active conversations",
+    "queriesRun": "Queries Run",
+    "thisMonth": "This month",
+    "dataRetrieved": "Data Retrieved",
+    "rowsAnalyzed": "Rows analyzed",
+    "databaseConnections": "Database Connections",
+    "yourActiveConnections": "Your active database connections",
+    "recentChats": "Recent Chats",
+    "yourChatSessions": "Your AI chat sessions",
+    "loginToViewConnections": "Please log in to view your connections",
+    "loginToViewChats": "Please log in to view your chat sessions",
+    "noConnectionsYet": "No connections yet. Add your first database!",
+    "noChatsYet": "No chat sessions yet. Start your first conversation!",
+    "unknownDB": "Unknown DB",
+    "connected": "connected",
+    "disconnected": "disconnected",
+    "error": "error",
+    "unknown": "unknown"
+  },
+  "connections": {
+    "title": "Database Connections",
+    "description": "Manage your database connections",
+    "addConnection": "Add Connection",
+    "editConnection": "Edit Connection",
+    "addNewConnection": "Add a new database connection",
+    "updateConnectionDetails": "Update your database connection details",
+    "name": "Name",
+    "connectionName": "Connection Name",
+    "databaseType": "Database Type",
+    "connectionMethod": "Connection Method",
+    "standard": "Standard TCP/IP",
+    "sshTunnel": "SSH Tunnel",
+    "localSocket": "Local Socket/Pipe",
+    "host": "Host",
+    "port": "Port",
+    "database": "Database",
+    "username": "Username",
+    "password": "Password",
+    "useSSL": "Use SSL",
+    "sshHost": "SSH Host",
+    "sshPort": "SSH Port",
+    "sshUsername": "SSH Username",
+    "sshPassword": "SSH Password",
+    "sshKeyFile": "SSH Key File (optional)",
+    "socketPath": "Socket/Pipe Path",
+    "defaultSchema": "Default Schema (optional)",
+    "testConnection": "Test Connection",
+    "connectionDeleted": "Connection deleted",
+    "connectionDeletedDesc": "The database connection has been removed.",
+    "connectionAdded": "Connection added",
+    "connectionAddedDesc": "The database connection has been added.",
+    "connectionUpdated": "Connection updated",
+    "connectionUpdatedDesc": "The database connection has been updated.",
+    "testingConnection": "Testing connection...",
+    "pleasewait": "Please wait while we test the connection.",
+    "connectionSuccessful": "Connection successful",
+    "successfullyConnected": "Successfully connected to the database",
+    "connectionFailed": "Connection failed",
+    "checkCredentials": "Failed to connect. Please check your credentials.",
+    "connectionTestFailed": "Connection test failed",
+    "errorOccurred": "An error occurred while testing the connection.",
+    "errorLoading": "Error loading connections",
+    "failedToLoad": "Failed to load your database connections.",
+    "errorDeleting": "Error deleting connection",
+    "failedToDelete": "Failed to delete the database connection.",
+    "errorSaving": "Error saving connection",
+    "failedToSave": "Failed to save the database connection."
+  },
+  "chat": {
+    "selectDatabase": "Select Database",
+    "noConnections": "No connections available",
+    "newChat": "New Chat",
+    "schemaBrowser": "Schema Browser",
+    "allowModifications": "Allow Data Modifications",
+    "typeMessage": "Type your message...",
+    "chatSessions": "Chat Sessions",
+    "selectConnection": "Please select a database connection first",
+    "noSessionsYet": "No chat sessions yet. Create a new one!",
+    "generationStopped": "Generation stopped",
+    "generationStoppedDesc": "AI generation has been stopped.",
+    "loginRequired": "Login Required",
+    "pleaseLogin": "Please log in to use the chat",
+    "selectDbFirst": "Please select a database first",
+    "deleteChatConfirm": "Are you sure you want to delete this chat session?",
+    "noDbSelected": "No database selected for this chat session.",
+    "noSessionFound": "No database session found. Please test a connection first.",
+    "failedToGetResponse": "Failed to get response from backend",
+    "failedToProcessQuery": "Failed to process query",
+    "queryExecutedSuccessfully": "Query executed successfully.",
+    "unexpectedError": "An unexpected error occurred",
+    "modificationCancelled": "Data modification was cancelled by user.",
+    "loginToView": "Please log in to view schema information.",
+    "selectDbToBrowse": "Select a database connection to browse its schema.",
+    "noStoredParams": "No stored connection parameters. Please test the connection first.",
+    "incompleteParams": "Incomplete connection parameters.",
+    "failedToLoadTables": "Failed to load tables from backend.",
+    "noTablesFound": "No tables found for the selected connection.",
+    "failedToLoadColumns": "Failed to load columns for table {{tableName}}.",
+    "failedToLoadSchema": "Failed to load schema.",
+    "loadingSchema": "Loading schema...",
+    "confirmDataChangeDesc": "This operation will modify your database. Please review and confirm."
+  },
+  "visualization": {
+    "title": "Data Visualization",
+    "description": "Visualize your database data with interactive charts",
+    "databaseConnection": "Database Connection",
+    "selectConnection": "Select connection",
+    "noConnectionsSaved": "No connections saved",
+    "visualizationLevel": "Visualization Level",
+    "schemaOverview": "Schema overview",
+    "tableRelationships": "Table relationships",
+    "columnDependencies": "Column dependencies",
+    "schema": "Schema",
+    "selectSchema": "Select schema",
+    "noSchemasAvailable": "No schemas available",
+    "table": "Table",
+    "selectTable": "Select table",
+    "noTablesAvailable": "No tables available",
+    "notRequiredForSchema": "Not required for schema view",
+    "allTablesInSchema": "All tables in schema",
+    "generateVisualization": "Generate Visualization",
+    "generating": "Generating...",
+    "visualizationPreview": "Visualization Preview",
+    "exploringSchema": "Exploring schema: {{schema}}",
+    "viewingAllSchemas": "Viewing all schemas",
+    "relationshipsCenteredOn": "Relationships centered on {{table}}",
+    "selectTableForRelationships": "Select a table to focus on its relationships",
+    "columnLevelDependencies": "Column-level dependencies for {{table}}",
+    "selectTableForColumns": "Select a table for column-level dependencies",
+    "buildingGraph": "Building graph...",
+    "chooseAndGenerate": "Choose the desired level, optionally pick a schema or table, then click \"Generate Visualization\".",
+    "howThisWorks": "How this works",
+    "description1": "• The graph is generated by the backend's `feature_visualization.py` helpers and rendered with vis.js.",
+    "description2": "• Schema level reveals available schemas; table level highlights foreign-key relationships between tables.",
+    "description3": "• Column level maps column-level dependencies based on foreign keys.",
+    "description4": "• You can click and drag nodes, zoom in/out, and pan with your mouse.",
+    "selectConnectionPrompt": "Select a connection",
+    "chooseDbConnection": "Choose a database connection before generating a visualization.",
+    "missingConnectionDetails": "Missing connection details",
+    "testConnectionFirst": "Please test this connection first to cache the credentials.",
+    "selectTablePrompt": "Select a table",
+    "columnViewRequiresTable": "Column-level views require a table selection.",
+    "visualizationReady": "Visualization ready",
+    "focusedViewFor": "Focused view for {{filter}}",
+    "showingLevelRelationships": "Showing {{level}}-level relationships",
+    "visualizationFailed": "Visualization failed",
+    "failedToLoad": "Failed to load visualization.",
+    "noConnectionDetails": "No connection details",
+    "errorLoadingTables": "Error loading tables",
+    "errorLoadingConnections": "Error loading connections"
+  },
+  "login": {
+    "title": "Welcome back",
+    "description": "Enter your credentials to access your account",
+    "email": "Email",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "orContinueWith": "Or continue with",
+    "google": "Google",
+    "github": "GitHub",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "error": "Error",
+    "validationError": "Validation Error",
+    "unexpectedError": "An unexpected error occurred",
+    "welcomeBack": "Welcome back!",
+    "successfullyLoggedIn": "Successfully logged in."
+  },
+  "signup": {
+    "title": "Create an account",
+    "description": "Enter your details to get started",
+    "name": "Name",
+    "namePlaceholder": "John Doe",
+    "email": "Email",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "Create account",
+    "creatingAccount": "Creating account...",
+    "orContinueWith": "Or continue with",
+    "google": "Google",
+    "github": "GitHub",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "accountCreated": "Account created!",
+    "checkEmail": "Please check your email to verify your account.",
+    "error": "Error",
+    "validationError": "Validation Error",
+    "unexpectedError": "An unexpected error occurred",
+    "agreeToTerms": "I agree to the",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "termsRequired": "Terms Required",
+    "termsRequiredDesc": "You must agree to the Terms of Service to create an account."
+  },
+  "forgotPassword": {
+    "title": "Reset your password",
+    "descriptionBeforeSend": "Enter your email address and we'll send you instructions",
+    "descriptionAfterSend": "We sent you an email with instructions to reset your password",
+    "email": "Email",
+    "emailPlaceholder": "name@example.com",
+    "sendResetLink": "Send reset link",
+    "sending": "Sending...",
+    "emailSent": "Email sent!",
+    "checkInbox": "Check your inbox for password reset instructions.",
+    "accountExistsMessage": "If an account exists with that email, you'll receive a password reset link shortly.",
+    "tryAnotherEmail": "Try another email",
+    "backToLogin": "Back to login"
+  },
+  "footer": {
+    "about": "About",
+    "aboutDescription": "Your intelligent database companion for seamless data exploration and analysis.",
+    "legal": "Resources",
+    "documentation": "Documentation",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "legalDisclosure": "Legal Disclosure",
+    "contact": "Contact",
+    "copyright": "All rights reserved."
+  },
+  "authDialog": {
+    "title": "Welcome",
+    "description": "Sign in to your account or create a new one",
+    "login": "Login",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "emailPlaceholder": "name@example.com",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in...",
+    "name": "Name",
+    "namePlaceholder": "John Doe",
+    "confirmPassword": "Confirm Password",
+    "createAccount": "Create account",
+    "creatingAccount": "Creating account...",
+    "orContinueWith": "Or continue with",
+    "github": "GitHub",
+    "welcomeBack": "Welcome back!",
+    "successfullyLoggedIn": "Successfully logged in.",
+    "accountCreated": "Account created!",
+    "checkEmail": "Please check your email to verify your account.",
+    "error": "Error",
+    "validationError": "Validation Error"
+  },
+  "confirmActionModal": {
+    "title": "Confirm Data Modification",
+    "noDataAvailable": "No data available",
+    "showSql": "Show SQL",
+    "hideSql": "Hide SQL",
+    "rowsDisplayed": "Rows displayed",
+    "resultsLimited": "Results limited to {{count}} rows.",
+    "preview": "Preview",
+    "diff": "Diff",
+    "cancel": "Cancel",
+    "execute": "Execute"
+  },
+  "layout": {
+    "dashboard": "Dashboard",
+    "connections": "Connections",
+    "chat": "Chat",
+    "visualization": "Visualization",
+    "settings": "Settings",
+    "login": "Login",
+    "logout": "Logout",
+    "loggingOut": "Logging out...",
+    "loggedOut": "Logged out",
+    "loggedOutDesc": "You have been successfully logged out.",
+    "errorLoggingOut": "Error logging out",
+    "errorOccurred": "An error occurred while logging out."
+  },
+  "chat": {
+    "chatSessions": "Chat Sessions",
+    "newSession": "New Session",
+    "schemaBrowser": "Schema Browser",
+    "usingDatabase": "Using database",
+    "askQuestion": "Ask a question about your data...",
+    "allowModifications": "Allow Modifications",
+    "noSessionsYet": "No chat sessions yet. Click \"New Session\" to start.",
+    "pleaseLogin": "Please log in to view chat sessions",
+    "downloadCSV": "Download CSV",
+    "viewSQL": "View SQL",
+    "expandSchemaBrowser": "Expand schema browser",
+    "collapseSchemaBrowser": "Collapse schema browser",
+    "expandChatSessions": "Expand chat sessions",
+    "collapseChatSessions": "Collapse chat sessions",
+    "loadingSchema": "Loading schema...",
+    "noSchemaAvailable": "No schema available",
+    "selectDatabase": "Select a database to view schema",
+    "unknown": "Unknown",
+    "hideQueryPanel": "Hide Query Panel",
+    "showQueryPanel": "Show Query Panel",
+    "confirmDataChange": "Confirm Data Change",
+    "noDataAvailable": "No data available",
+    "showSQL": "Show SQL",
+    "hideSQL": "Hide SQL",
+    "rowsShown": "Rows shown",
+    "resultsLimited": "Results limited to {{count}} rows",
+    "objectName": "Object Name",
+    "objectNamePlaceholder": "e.g. view_name, table_name, procedure_name",
+    "preview": "Preview",
+    "sqlCode": "SQL Code",
+    "difference": "Difference"
+  },
+  "notFound": {
+    "title": "404",
+    "description": "Oops! Page not found",
+    "returnHome": "Return to Home"
+  },
+  "index": {
+    "title": "Welcome to Your Blank App",
+    "description": "Start building your amazing project here!"
+  },
+  "docs": {
+    "title": "Documentation",
+    "subtitle": "Learn how to use SQLSphere effectively",
+    "navigation": "Navigation",
+    "gettingStarted": "Getting Started",
+    "gettingStartedDesc": "Quick guide to get you up and running",
+    "connections": "Database Connections",
+    "connectionsDesc": "Learn how to connect your databases securely",
+    "aiChat": "AI Chat",
+    "aiChatDesc": "Master the AI-powered query assistant",
+    "visualization": "Visualization",
+    "visualizationDesc": "Explore your database structure visually",
+    "dataImport": "Data Import",
+    "dataImportDesc": "Import data from various file formats",
+    "security": "Security",
+    "securityDesc": "Understanding our security measures",
+    "tipsAndTricks": "Tips & Tricks",
+    "tipsDesc": "Get the most out of SQLSphere",
+    "faq": "FAQ",
+    "faqDesc": "Frequently asked questions",
+    "welcomeTitle": "Welcome to SQLSphere!",
+    "welcomeText": "SQLSphere is your intelligent database assistant that helps you explore, query, and visualize your data using natural language. No need to remember complex SQL syntax – just ask questions in plain English!",
+    "step1Title": "Create an Account",
+    "step1Desc": "Sign up for free to access all features and save your connections.",
+    "step2Title": "Add a Connection",
+    "step2Desc": "Connect your database securely using credentials or SSH tunnel.",
+    "step3Title": "Start Chatting",
+    "step3Desc": "Ask questions about your data in natural language.",
+    "step4Title": "Explore & Visualize",
+    "step4Desc": "View database structure and relationships visually.",
+    "supportedDatabases": "Supported Databases",
+    "connectionMethods": "Connection Methods",
+    "standardConnection": "Standard TCP/IP Connection",
+    "standardConnectionDesc": "Direct connection to your database using Host, Port, Database Name, Username, and Password. Ensure your database is accessible from this machine.",
+    "sshTunnelConnection": "SSH Tunnel Connection",
+    "sshTunnelConnectionDesc": "Connect to a database behind a bastion/jump host via SSH. Useful for cloud databases or private networks. SQLSphere establishes an SSH tunnel to the jump host and forwards the database port through it.",
+    "localSocket": "Unix Socket Connection",
+    "localSocketDesc": "Connect to a database running on the same server using a Unix domain socket file instead of TCP/IP. Available for PostgreSQL and MySQL. Faster and more secure for local connections. Provide the socket file path (e.g., /var/run/postgresql/.s.PGSQL.5432).",
+    "namedPipeConnection": "Named Pipe Connection (Windows)",
+    "namedPipeConnectionDesc": "Connect to SQL Server using a Windows Named Pipe instead of TCP/IP. Only available on Windows when both the client and server are on the same machine or domain. Provide the pipe name (e.g., \\\\.\\pipe\\MSSQL$SQLEXPRESS\\sql\\query).",
+    "localAgentConnection": "Local Database (via Agent) — Coming Soon",
+    "localAgentConnectionDesc": "The Local Agent is currently under development. Once available, it will let you connect to a database on your local machine via a lightweight desktop app — securely and without port forwarding.",
+    "localhostWarning": "Note: Local Database",
+    "localhostWarningText": "You are using 'localhost' as the host. If SQLSphere is deployed on a server, you cannot directly access your local database.",
+    "localhostWarningTextMySQL": "You are using 'localhost' as the host. If SQLSphere is deployed on a server, you need to use an SSH tunnel to access your local database.",
+    "localhostWarningLink": "Learn more in the documentation",
+    "sshTunnelTitle": "SSH Tunnel for Local Databases",
+    "sshTunnelDesc": "If you want to connect to a local database (localhost) from a deployed website, you need to use an SSH tunnel.",
+    "sshTunnelStep1": "**Enable SSH Tunnel** - Select 'SSH Tunnel' as the connection method in the connection dialog.",
+    "sshTunnelStep2": "**Enter SSH Host** - Enter the IP address or hostname of your computer where the database is running (e.g., your public IP or a DynDNS hostname).",
+    "sshTunnelStep3": "**SSH Credentials** - Enter your SSH username and password to connect to your computer.",
+    "sshTunnelStep4": "**Database Host** - Use 'localhost' or '127.0.0.1' as the database host, as the connection goes through the SSH tunnel.",
+    "sshTunnelStep5": "**Port Forwarding** - The SSH tunnel automatically forwards the database port from your local computer to the server.",
+    "sshTunnelNote": "Note: Your computer must be accessible from outside via SSH. Make sure port 22 (SSH) is open in your firewall.",
+    "sshTunnelSetupTitle": "Setting up SSH on your computer",
+    "sshTunnelSetupDesc": "To use SSH tunnels, you need to enable SSH server on your local computer and make it accessible from outside.",
+    "sshTunnelSetupMac": "**macOS:** SSH is installed by default. Enable it in System Settings → General → Sharing → Remote Login. Or in Terminal: `sudo systemsetup -setremotelogin on`",
+    "sshTunnelSetupWindows": "**Windows:** Install OpenSSH Server via 'Settings → Apps → Optional Features → OpenSSH Server'. Or use WSL with SSH.",
+    "sshTunnelSetupLinux": "**Linux:** SSH is usually pre-installed. If not: `sudo apt-get install openssh-server` (Ubuntu/Debian) or `sudo yum install openssh-server` (CentOS/RHEL).",
+    "sshTunnelSetupCredentials": "**SSH Credentials:** Use your regular computer username and password. On macOS/Linux, this is your system username. On Windows, you can create a separate SSH user.",
+    "sshTunnelSetupIP": "**Find Public IP:** Visit https://whatismyip.com or run `curl ifconfig.me` in terminal. Important: This IP may change (dynamic IP).",
+    "sshTunnelSetupDynDNS": "**DynDNS (recommended):** For a fixed address, use a free DynDNS service like No-IP, DuckDNS, or Dynu. This keeps your address the same even if your IP changes.",
+    "sshTunnelSetupFirewall": "**Firewall:** Open port 22 (SSH) in your router firewall (port forwarding) and in your computer firewall. On macOS: System Settings → Network → Firewall → Firewall Options.",
+    "sshTunnelSetupRouter": "**Router Configuration:** Set up port forwarding for port 22 from your router to your local IP address. Find your local IP with `ipconfig` (Windows) or `ifconfig` (macOS/Linux).",
+    "connectionTip": "Important Tip",
+    "connectionTipText": "Always test your connection before saving. This ensures your credentials are correct and the database is reachable.",
+    "connectionUITitle": "Connection Interface Guide",
+    "connectionUI1": "**Add Connection Button** - Opens the connection dialog. Requires login. Free plan is limited to 1 connection; Pro plan allows unlimited connections.",
+    "connectionUI2": "**Database Type Dropdown** - Select PostgreSQL, MySQL, or SQL Server. The port, SSL options, and available authentication methods adjust automatically.",
+    "connectionUI3": "**Connection Method** - Choose from five options: 'Standard TCP/IP' (direct network connection), 'SSH Tunnel' (via bastion/jump host), 'Unix Socket' (MySQL/PostgreSQL local socket file), 'Named Pipe' (SQL Server on Windows), or 'Local Database (Agent)' (via the SQLSphere desktop agent).",
+    "connectionUI4": "**Authentication Method** - Choose how to authenticate. Options vary by database: Standard SQL credentials, Windows Authentication (SQL Server), Azure AD — Password / Service Principal / Integrated / MFA / Managed Identity (SQL Server & PostgreSQL), AWS RDS IAM (MySQL & PostgreSQL), SSL Certificate Auth, or Custom Connection String (expert mode).",
+    "connectionUI5": "**SSH Tunnel Fields** - Shown when 'SSH Tunnel' is selected: SSH Hostname, SSH Port (default 22), SSH Username, SSH Password, and optional SSH Key File path. The database host/port fields still refer to the database server as seen from inside the SSH host.",
+    "connectionUI6": "**Local Agent Section** - Shown when 'Local Database (Agent)' is selected: click 'Generate Code' to create a unique connection code, then enter it in the SQLSphere Agent app on your local machine together with your database credentials.",
+    "connectionUI7": "**Host, Port & Named Instance** - Enter the database server address and port. For SQL Server you can optionally provide a Named Instance (e.g., SQLEXPRESS) instead of a port.",
+    "connectionUI8": "**Database & Credentials** - Enter the database name, username, and password. Fields adapt based on the chosen authentication method (e.g., hidden for Windows Auth; replaced by Azure/AWS settings for cloud auth).",
+    "connectionUI9": "**SSL / TLS Configuration** (collapsible section) - Set the SSL Mode (PostgreSQL: disable/allow/prefer/require/verify-ca/verify-full; MySQL: disabled/preferred/required/verify_ca/verify_identity). Optionally provide CA Certificate, Client Certificate, and Client Key via file path or paste PEM. SQL Server has a separate Encrypt dropdown and Trust Server Certificate toggle.",
+    "connectionUI10": "**Default Schema** - Optional: pre-select a schema used in chat and visualization (e.g., 'public' for PostgreSQL, 'dbo' for SQL Server).",
+    "connectionUI11": "**Test Connection Button** - Sends the credentials to the backend to verify the connection and caches the session. Always test before saving to ensure everything is correct!",
+    "connectionUI12": "**Save / Edit / Delete** - Save stores the connection for future use. The Edit icon (pencil) reopens the dialog with existing values. The Delete icon (trash) permanently removes the connection.",
+    "tooltipAddConnection": "Create a new database connection",
+    "tooltipDbType": "Select your database system (PostgreSQL, MySQL, or SQL Server)",
+    "tooltipHost": "Server address (e.g., localhost or IP address)",
+    "tooltipPort": "Database port number",
+    "tooltipDbName": "Name of the database to connect to",
+    "tooltipUsername": "Your database username",
+    "tooltipPassword": "Your database password (stored securely)",
+    "tooltipSsl": "Enable SSL for encrypted connection (recommended for remote)",
+    "tooltipDefaultSchema": "Optional: Set a default schema to use",
+    "tooltipTestConnection": "Test if the connection works before saving",
+    "tooltipSaveConnection": "Save this connection for future use",
+    "tooltipEditConnection": "Edit this connection's settings",
+    "tooltipDeleteConnection": "Remove this connection",
+    "tooltipConnHost": "Enter the database server address (e.g., localhost, 192.168.1.100, or domain name)",
+    "tooltipConnPort": "The port your database listens on. Default: PostgreSQL=5432, MySQL=3306, SQL Server=1433",
+    "tooltipConnDatabase": "The specific database name you want to connect to",
+    "tooltipConnUsername": "Your database login username",
+    "tooltipConnPassword": "Your database password. Stored securely and encrypted.",
+    "tooltipConnSsl": "Enable SSL/TLS encryption for secure connections (recommended for remote databases)",
+    "tooltipConnTest": "Verify that the connection works before saving",
+    "tooltipConnEdit": "Modify this connection's settings",
+    "tooltipConnDelete": "Permanently remove this connection",
+    "whatCanYouDo": "What You Can Do",
+    "aiFeature1": "Query Your Data",
+    "aiFeature1Desc": "Ask questions like 'Show me all users who signed up last month' and get results instantly.",
+    "aiFeature2": "Generate SQL",
+    "aiFeature2Desc": "The AI generates optimized SQL queries based on your natural language questions.",
+    "aiFeature3": "Analyze Results",
+    "aiFeature3Desc": "Get insights and summaries about your query results automatically.",
+    "aiFeature4": "Modify Data",
+    "aiFeature4Desc": "With the modifications toggle enabled, the AI can execute INSERT, UPDATE, DELETE, CREATE, ALTER, DROP statements directly. Changes are shown as diffs in the editor with Keep/Reject buttons.",
+    "exampleQueries": "Example Queries",
+    "exampleQuery1": "Show me the top 10 customers by total orders",
+    "exampleQuery2": "What were our sales last quarter?",
+    "exampleQuery3": "Find all products with low inventory",
+    "exampleQuery4": "List employees who joined in 2024",
+    "exampleQuery5": "How many active subscriptions do we have?",
+    "aiTip": "Pro Tip",
+    "aiTipText": "Be specific in your questions! Instead of 'show data', try 'show the last 20 orders with customer names and total amounts'.",
+    "chatUITitle": "Chat Interface Guide (Cursor-Style Layout)",
+    "chatUI1": "**3-Column Layout** - The interface is divided into: **Schema Browser** (left, 20%), **SQL Editor** (middle, 40%), and **AI Chat** (right, 40%). All panels are resizable.",
+    "chatUI2": "**Database Dropdown** (top left) - Select which database connection to use for this chat session.",
+    "chatUI3": "**Chat Sessions Card** (top right) - Shows all your previous chats. Click to switch between them. Edit (pencil) to rename, delete (trash) to remove.",
+    "chatUI4": "**Schema Browser** (left panel) - Browse all database objects (tables, views, procedures, functions, triggers, sequences). Click tables/views to open SELECT query in editor. Right-click for context menu.",
+    "chatUI5": "**SQL Editor** (middle panel) - Multi-tab editor with syntax highlighting, autocompletion, and diff view. New queries open in new tabs. Modifications show diffs with Keep/Reject buttons.",
+    "chatUI6": "**AI Chat** (right panel) - Natural language interface. Type questions and get SQL generated automatically. Shows compact diff (red/green lines) for changes. Keep/Reject buttons to accept or discard AI suggestions.",
+    "chatUI7": "**Message Input** (bottom of chat panel) - Auto-resizing textarea. Type your question in natural language. Press Enter to send, Shift+Enter for new line.",
+    "chatUI8": "**Send Button** - Submits your question to the AI. The AI generates SQL, opens it in the editor, and executes it automatically.",
+    "chatUI9": "**Allow Modifications Checkbox** - When enabled, the AI can execute INSERT, UPDATE, DELETE, CREATE, ALTER, DROP statements directly (no confirmation required).",
+    "chatUI10": "**Query Results Panel** (bottom, 50% height) - Shows all executed queries and their results. Horizontally scrollable tables. New results appear at the top and auto-scroll.",
+    "schemaBrowserTitle": "Schema Browser Guide",
+    "schemaBrowser1": "**Schema Folders** - Expandable folders showing each schema in your database. Click the '>' button to expand/collapse.",
+    "schemaBrowser2": "**Tables/Views/Materialized Views** - Click a table/view name to open 'SELECT * FROM table' in a new editor tab (no implicit LIMIT is added). Click the '>' button next to the name to expand and see all columns with their data types.",
+    "schemaBrowser3": "**Procedures/Functions** - Left-click to view the source code definition in the editor. Right-click for context menu: 'Execute Procedure', 'View Definition'.",
+    "schemaBrowser4": "**Triggers/Sequences** - Right-click for context menu options: 'View Definition', 'Delete'.",
+    "schemaBrowser5": "**Refresh Button** (circular arrow, top) - Reloads the schema if you made database changes.",
+    "schemaBrowser6": "**Context Menu** (right-click) - Available for all objects: 'Select Top 100 Rows', 'View Definition', 'Execute Procedure' (for procedures), 'Delete'.",
+    "schemaBrowser7": "**Column Display** - Tables, views, and materialized views show columns with data types when expanded. Click the small arrow button (>) next to the object name to expand/collapse columns.",
+    "schemaBrowser8": "**Horizontal Scrolling** - The schema browser is horizontally scrollable if content is wider than the panel.",
+    "queryPanel": "Query Results Panel",
+    "queryPanelDesc": "The Query Results Panel (bottom, 50% height) shows all executed queries and their results. New results appear at the top and auto-scroll. Tables are horizontally scrollable.",
+    "queryPanelFeature1": "View all executed queries and their results",
+    "queryPanelFeature2": "New results appear at the top automatically",
+    "queryPanelFeature3": "Download results as CSV",
+    "queryPanelFeature4": "Get AI help when your SQL has errors (automatic error analysis with corrected SQL)",
+    "queryPanelTitle": "Query Panel Guide",
+    "queryPanel1": "**Panel Position** - Located at the bottom, occupies 50% of vertical space. Split with SQL Editor (50% each).",
+    "queryPanel2": "**Auto-Scroll** - When new results arrive, the panel automatically scrolls to show them.",
+    "queryPanel3": "**Result Order** - New results appear at the top of the list (most recent first).",
+    "queryPanel4": "**Horizontal Scrolling** - Each result table is horizontally scrollable if there are more columns than can be displayed.",
+    "queryPanel5": "**SQL Display** - Each result shows the SQL that was executed above the table.",
+    "queryPanel6": "**Download CSV Button** - Download the result table as a CSV file.",
+    "queryPanel7": "**Expand/Collapse** - Each result can be expanded/collapsed to save space.",
+    "queryPanel8": "**Timestamp** - Shows when each query was executed.",
+    "tooltipSelectDb": "Choose the database for this chat session",
+    "tooltipDbSelect": "Select the database connection to use",
+    "tooltipEditSession": "Rename this chat session",
+    "tooltipDeleteSession": "Delete this chat permanently",
+    "tooltipNewChat": "Start a new conversation with the AI",
+    "tooltipRenameChat": "Give this chat a meaningful name",
+    "tooltipDeleteChat": "Delete this chat session permanently",
+    "tooltipCollapsePanel": "Hide this panel to get more space",
+    "tooltipExpandPanel": "Show this panel",
+    "tooltipSendMessage": "Send your question to the AI",
+    "tooltipAllowModifications": "When enabled, AI can run INSERT, UPDATE, DELETE (asks for confirmation)",
+    "tooltipViewSql": "See the SQL query that was generated",
+    "tooltipRefreshSchema": "Reload the database schema",
+    "tooltipClickTable": "Click to preview first 10 rows",
+    "tooltipClickProcedure": "Click to view source code",
+    "tooltipDeleteObject": "Drop this database object (requires confirmation)",
+    "tooltipShowQueryPanel": "Show/hide the query results panel",
+    "tooltipRunSql": "Execute your SQL query (Ctrl+Enter)",
+    "tooltipClearResults": "Remove all query results",
+    "tooltipLoadMoreRows": "Load up to 1000 rows (currently showing 10)",
+    "tooltipDownloadCsv": "Download these results as CSV file",
+    "tooltipRemoveResult": "Remove this result from the list",
+    "visualizationLevels": "Visualization Levels",
+    "schemaLevel": "Schema Overview",
+    "schemaLevelDesc": "Provides a high-level interactive map of all schemas in your database. Uses D3.js to visually group tables by schema.",
+    "tableLevel": "Table Relationships",
+    "tableLevelDesc": "Interactive force-directed graph showing tables as nodes and foreign keys as links. Supports auto-layout, dragging nodes, and zooming to explore complex relationships.",
+    "columnLevel": "Column Dependencies",
+    "columnLevelDesc": "Deep dive into column-level dependencies. visually traces how specific columns reference others across tables.",
+    "interactionTips": "Interaction Tips",
+    "visTip1": "Drag nodes to rearrange the layout",
+    "visTip2": "Zoom in/out using your mouse wheel",
+    "visTip3": "Click on a node to highlight its connections",
+    "visTip4": "The graph automatically arranges for optimal viewing",
+    "visTip5": "The graph automatically switches level (Schema -> Table -> Column) based on your selection.",
+    "visTip6": "Use the 'Filter' option to focus on specific schemas or tables.",
+    "visTip7": "Clicking a node centers the view and highlights connected relationships.",
+    "visUITitle": "Visualization Interface Guide",
+    "visUI1": "**Connection Dropdown** - Select which database to visualize.",
+    "visUI2": "**Schema Dropdown** - Filter to a specific schema or leave empty for all.",
+    "visUI3": "**Table Dropdown** - Select a specific table to focus on its relationships.",
+    "visUI4": "**Column Dropdown** - (When table selected) Choose a column to see column-level dependencies.",
+    "visUI5": "**Show All Columns Checkbox** - Display all columns in table nodes, not just key columns.",
+    "visUI6": "**Show Only Connected Tables** - Hide isolated tables with no relationships.",
+    "visUI7": "**Object Types Checkboxes** - Toggle visibility: Tables, Views, Procedures, Functions, Triggers, Sequences, Materialized Views.",
+    "visUI8": "**Generate Visualization Button** - Renders the graph based on your selections.",
+    "visUI9": "**Zoom In/Out Buttons** - Adjust the zoom level of the graph.",
+    "visUI10": "**Graph Canvas** - Interactive area: drag nodes, scroll to zoom, click to focus.",
+    "visUI11": "**Edge Labels** - Show relationship descriptions (e.g., foreign key column names).",
+    "visUI12": "**Table Nodes** - Display table name, columns (with types), and key icons.",
+    "tooltipVisConnection": "Select which database to visualize",
+    "tooltipVisSchema": "Filter to show only tables from this schema",
+    "tooltipVisTable": "Focus on this table and its relationships",
+    "tooltipVisColumn": "View column-level dependencies",
+    "tooltipShowAllColumns": "Show all columns in table nodes, not just keys",
+    "tooltipConnectedOnly": "Hide tables that have no relationships",
+    "tooltipObjectTypes": "Toggle visibility of different object types",
+    "tooltipGenerateVis": "Generate the visualization based on your selections",
+    "tooltipZoomIn": "Zoom in on the graph",
+    "tooltipZoomOut": "Zoom out to see more",
+    "tooltipResetZoom": "Reset zoom to fit all content",
+    "supportedFormats": "Supported File Formats",
+    "importSteps": "How to Import Data",
+    "importStep1": "Select a database connection",
+    "importStep2": "Choose your file (CSV, Excel .xlsx/.xls, SQL dump, or JSON)",
+    "importStep3": "Map columns to your target table (for CSV/Excel/JSON)",
+    "importStep4": "Preview the data before importing",
+    "importStep5": "Execute the import and verify results",
+    "importWarning": "Before Importing",
+    "importWarningText": "Always backup your data before large imports. Consider testing with a small subset first.",
+    "importUITitle": "Data Import Interface Guide",
+    "importUI1": "**Connection Dropdown** - Select the database where you want to import data.",
+    "importUI2": "**File Upload Area** - Drag & drop a file or click to browse. Supports CSV, Excel, SQL, JSON.",
+    "importUI3": "**Schema Dropdown** - Choose the schema where the target table is located.",
+    "importUI4": "**Table Dropdown** - Select an existing table to import into.",
+    "importUI5": "**Create New Table Toggle** - Enable to create a new table from your file structure.",
+    "importUI6": "**New Table Name Field** - (When creating) Enter the name for the new table.",
+    "importUI7": "**Parsing Settings Button** - Configure: encoding (UTF-8, Latin-1), delimiter (comma, semicolon, tab), header row.",
+    "importUI8": "**Column Mapping Table** - Map each file column to a database column.",
+    "importUI9": "**Column Type Dropdown** - (When creating) Select data type: TEXT, INTEGER, REAL, DATE, BOOLEAN.",
+    "importUI10": "**Rename Column Input** - Change the column name before import.",
+    "importUI11": "**Hide Column Button** (eye icon) - Exclude a column from the import.",
+    "importUI12": "**Duplicate Handling Dropdown** - Choose: 'Error' (fail on duplicates), 'Skip' (ignore), 'Update' (overwrite existing).",
+    "importUI13": "**Preview Section** - Shows first 5 rows of your file before importing.",
+    "importUI14": "**Import Button** - Executes the import with your configured settings.",
+    "importUI15": "**Import History Section** - View past imports with details: filename, rows imported/failed, timestamp.",
+    "tooltipImportConnection": "Select the database where you want to import data",
+    "tooltipImportSchema": "Choose the schema containing the target table",
+    "tooltipImportTable": "Select or create the table to import into",
+    "tooltipFileUpload": "Drag & drop or click to select a file (CSV, Excel, SQL, JSON)",
+    "tooltipCreateTable": "Create a new table instead of importing into existing one",
+    "tooltipParseSettings": "Configure file parsing options",
+    "tooltipColumnType": "Set the data type for this column",
+    "tooltipRenameColumn": "Change the column name before import",
+    "tooltipHideColumn": "Exclude this column from the import",
+    "tooltipDuplicateHandling": "How to handle duplicate records",
+    "tooltipStartImport": "Begin importing data into the database",
+    
+    "tooltipDbSelect": "Choose which database to use for this chat session",
+    "tooltipNewChat": "Start a new conversation with the selected database",
+    "tooltipAllowModifications": "Enable INSERT, UPDATE, DELETE operations (requires confirmation)",
+    "tooltipRefreshSchema": "Reload database schema to see recent changes",
+    "tooltipShowQueryPanel": "Open panel to view query results and write SQL",
+    "tooltipRunSql": "Execute your SQL query (Ctrl+Enter)",
+    "tooltipClearResults": "Remove all query results from the panel",
+    "tooltipLoadMore": "Fetch more rows (up to 1000 total)",
+    "tooltipDownloadCsv": "Download these results as a CSV file",
+    "tooltipViewSql": "Show the SQL query that was executed",
+    "tooltipDeleteSession": "Permanently delete this chat session",
+    "tooltipEditSession": "Rename this chat session",
+    "tooltipCollapsePanel": "Collapse this panel to save space",
+    "tooltipExpandPanel": "Expand this panel",
+    "tooltipTablePreview": "Click to preview first 10 rows of this table",
+    "tooltipViewCode": "Click to view the source code definition",
+    "tooltipDeleteObject": "Drop this database object (requires confirmation)",
+    
+    "tooltipConnDbType": "Select your database system",
+    "tooltipConnHost": "Server address (e.g., localhost, 192.168.1.100, db.example.com)",
+    "tooltipConnPort": "Default: PostgreSQL 5432, MySQL 3306, SQL Server 1433",
+    "tooltipConnDatabase": "Name of the specific database to connect to",
+    "tooltipConnUsername": "Your database login username",
+    "tooltipConnPassword": "Your database password (stored encrypted)",
+    "tooltipConnSsl": "Enable SSL/TLS encryption for secure connections",
+    "tooltipConnSchema": "Default schema to use (e.g., 'public' for PostgreSQL)",
+    "tooltipConnTest": "Verify your connection settings before saving",
+    "tooltipConnSave": "Save this connection for future use",
+    "tooltipConnEdit": "Modify this connection's settings",
+    "tooltipConnDelete": "Remove this saved connection",
+    
+    "tooltipVisConnection": "Select which database to visualize",
+    "tooltipVisSchema": "Filter to a specific schema (leave empty for all)",
+    "tooltipVisTable": "Focus on a specific table's relationships",
+    "tooltipVisColumn": "Show column-level dependencies for this table",
+    "tooltipVisAllColumns": "Show all columns in table nodes, not just keys",
+    "tooltipVisConnectedOnly": "Hide tables that have no relationships",
+    "tooltipVisGenerate": "Render the dependency graph with current settings",
+    "tooltipVisZoomIn": "Zoom in on the graph",
+    "tooltipVisZoomOut": "Zoom out of the graph",
+    "tooltipVisReset": "Reset view to fit all nodes",
+    
+    "tooltipImportConnection": "Select target database for import",
+    "tooltipImportSchema": "Choose the schema containing your target table",
+    "tooltipImportTable": "Select existing table or create new one",
+    "tooltipImportCreateNew": "Create a new table from your file structure",
+    "tooltipImportSettings": "Configure file parsing: encoding, delimiter, headers",
+    "tooltipImportColumnType": "Select data type for this column",
+    "tooltipImportHideColumn": "Exclude this column from import",
+    "tooltipImportDuplicates": "How to handle duplicate key conflicts",
+    "tooltipImportExecute": "Start importing data into the database",
+    "securityFeature1": "Encrypted Connections",
+    "securityFeature1Desc": "All database connections support SSL/TLS encryption to protect your data in transit.",
+    "securityFeature2": "Secure Credential Storage",
+    "securityFeature2Desc": "Your database credentials are encrypted and never logged or exposed.",
+    "securityFeature3": "Read-Only by Default",
+    "securityFeature3Desc": "Data modifications are disabled by default. You must explicitly enable them.",
+    "securityFeature4": "Modification Confirmation",
+    "securityFeature4Desc": "Any data-modifying query requires explicit confirmation before execution.",
+    "securityTip": "Best Practice",
+    "securityTipText": "Use database accounts with minimal required permissions. For read-only analysis, use a read-only database user.",
+    "tip1Title": "Use Natural Language",
+    "tip1Content": "Don't try to write SQL in the chat. Just describe what you want in plain language, and the AI will generate the optimal query.",
+    "tip2Title": "Explore Schema First",
+    "tip2Content": "Use the Schema Browser to understand your database structure before asking complex questions.",
+    "tip3Title": "Save Frequent Connections",
+    "tip3Content": "Test and save your database connections. This speeds up your workflow significantly.",
+    "tip4Title": "Check Query Results",
+    "tip4Content": "Always review the generated SQL and results. The AI is helpful but you know your data best.",
+    "tip5Title": "Use Visualization for Complex Schemas",
+    "tip5Content": "For databases with many tables, use the visualization feature to understand relationships quickly.",
+    "tip6Title": "Enable Modifications Carefully",
+    "tip6Content": "Only enable data modifications when necessary, and always review the preview before confirming changes.",
+    "tip7Title": "Instant Data Preview",
+    "tip7Content": "Click on any table or view name in the Schema Browser sidebar to instantly run a 'SELECT * LIMIT 10' query and see its data.",
+    "tip8Title": "Quick Code Access",
+    "tip8Content": "Left-click on procedures, functions, or triggers in the Schema Browser to view their source code definition in the editor. Right-click for context menu options.",
+    "tip9Title": "Manual SQL Shortcut",
+    "tip9Content": "In the Query Results panel, you can press Ctrl+Enter (or Cmd+Enter) to quickly execute your manual SQL query.",
+    "tip10Title": "AI Error Recovery",
+    "tip10Content": "If your manual SQL fails, the AI automatically analyzes the error and provides a corrected query with a one-click 'Try again' button.",
+    "tip11Title": "Load More Data",
+    "tip11Content": "Query results show 10 rows by default for speed. Use the 'Load more rows' button to fetch up to 1000 rows for deeper analysis.",
+    "faq1Q": "Is my database data stored anywhere?",
+    "faq1A": "No, we don't store your actual database data. Only connection metadata and chat history are saved. Query results are temporary and not persisted.",
+    "faq2Q": "Can I use this with production databases?",
+    "faq2A": "Yes, but we recommend using read-only credentials for production databases. This prevents accidental data modifications.",
+    "faq3Q": "What if the AI generates incorrect SQL?",
+    "faq3A": "You can always review the generated SQL before execution. If there's an error, the AI will help you fix it.",
+    "faq4Q": "How accurate is the AI for complex queries?",
+    "faq4A": "The AI works best with clear, specific questions. For very complex queries, you might need to break them into smaller parts.",
+    "faq5Q": "How does the diff view work?",
+    "faq5A": "When the AI modifies existing code or generates new SQL, changes are shown as a diff: red for deletions, green for additions. Use Keep to accept or Reject to discard. The diff appears both in the editor (inline) and in the chat (compact).",
+    "faq6Q": "Can I export query results?",
+    "faq6A": "Yes, you can download any query results as CSV files directly from the Query Results Panel.",
+    "faq7Q": "Is there a query limit?",
+    "faq7A": "Free users have daily limits. Pro subscribers get unlimited queries and connections.",
+    "faq8Q": "What databases are supported?",
+    "faq8A": "We currently support PostgreSQL, MySQL, and SQL Server."
+  },
+  "subscription": {
+    "title": "Choose Your Plan",
+    "description": "Unlock the full potential of your database assistant",
+    "monthly": "Monthly",
+    "annual": "Annual",
+    "save20": "Save 20%",
+    "currentUsage": "Your Current Usage",
+    "connections": "Connections",
+    "messagesToday": "Messages Today",
+    "imports": "Imports",
+    "visualizations": "Visualizations",
+    "currentPlan": "Current Plan",
+    "recommended": "Recommended",
+    "free": "Free",
+    "freeDescription": "Get started with basic features",
+    "forever": "forever",
+    "databaseConnection": "database connection",
+    "messagesPerDay": "messages per day",
+    "totalImports": "total imports",
+    "visualizationsIncluded": "visualizations included",
+    "yourCurrentPlan": "Your Current Plan",
+    "freePlan": "Free Plan",
+    "pro": "Pro",
+    "proDescription": "Unlimited access to all features",
+    "month": "month",
+    "year": "year",
+    "annualSavings": "Save $60/year",
+    "unlimitedConnections": "Unlimited database connections",
+    "unlimitedMessages": "Unlimited messages per day",
+    "unlimitedImports": "Unlimited data imports",
+    "unlimitedVisualizations": "Unlimited visualizations",
+    "prioritySupport": "Priority support",
+    "manageSubscription": "Manage Subscription",
+    "upgradeToPro": "Upgrade to Pro",
+    "loading": "Loading...",
+    "subscriptionDetails": "Subscription Details",
+    "plan": "Plan",
+    "proMonthly": "Pro Monthly",
+    "proAnnual": "Pro Annual",
+    "renewsOn": "Renews on",
+    "subscriptionSuccess": "Subscription successful!",
+    "welcomeToPro": "Welcome to Pro! Enjoy unlimited access.",
+    "subscriptionCanceled": "Subscription canceled",
+    "noChargesMade": "No charges were made.",
+    "loginRequired": "Login required",
+    "pleaseLoginFirst": "Please log in to subscribe.",
+    "checkoutError": "Checkout error",
+    "failedToStartCheckout": "Failed to start checkout. Please try again.",
+    "portalError": "Portal error",
+    "failedToOpenPortal": "Failed to open billing portal. Please try again.",
+    "limitReached": "Limit reached",
+    "upgradeToUnlock": "Upgrade to Pro to unlock unlimited access",
+    "messageLimitReached": "You've reached your daily message limit",
+    "connectionLimitReached": "You've reached your connection limit",
+    "importLimitReached": "You've reached your import limit",
+    "visualizationLimitReached": "You've reached your visualization limit"
+  },
+  "footer": {
+    "about": "About",
+    "aboutDescription": "Your intelligent database companion for seamless data exploration and analysis.",
+    "learnMore": "Learn more",
+    "aboutUs": "About Us",
+    "legal": "Resources",
+    "documentation": "Documentation",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "legalDisclosure": "Legal Disclosure",
+    "contact": "Contact",
+    "copyright": "All rights reserved."
+  },
+  "termsOfService": {
+    "title": "Terms of Service",
+    "lastUpdated": "Last Updated",
+    "sections": {
+      "introduction": {
+        "title": "Introduction",
+        "content": "Welcome to SQLSphere. These Terms of Service govern your access to and use of our AI-powered database query and visualization platform. By using our service, you agree to be bound by these terms."
+      },
+      "acceptance": {
+        "title": "Acceptance of Terms",
+        "content": "By accessing or using SQLSphere, you acknowledge that you have read, understood, and agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree, please do not use our service."
+      },
+      "serviceDescription": {
+        "title": "Service Description",
+        "intro": "SQLSphere provides an AI-powered platform for:",
+        "features": {
+          "connections": "Secure database connections (PostgreSQL, MySQL, SQL Server)",
+          "chat": "Natural language queries translated to SQL",
+          "visualization": "Interactive database schema visualization",
+          "import": "Data import from CSV, Excel, and other formats",
+          "export": "Query result export capabilities"
+        }
+      },
+      "userAccounts": {
+        "title": "User Accounts",
+        "items": {
+          "registration": "You must provide accurate and complete registration information",
+          "security": "You are responsible for maintaining the security of your account credentials",
+          "notification": "You must notify us immediately of any unauthorized access",
+          "responsibility": "You are responsible for all activities under your account"
+        }
+      },
+      "subscriptions": {
+        "title": "Subscriptions and Payments",
+        "intro": "We offer the following subscription tiers:",
+        "tiers": {
+          "free": {
+            "name": "Free Tier",
+            "description": "Limited access with 1 connection, 3 messages/day, 2 lifetime imports"
+          },
+          "pro": {
+            "name": "Pro Tier",
+            "description": "Unlimited access at $25/month or $240/year (20% annual discount)"
+          }
+        },
+        "billing": "Payments are processed through Stripe. Subscriptions renew automatically unless cancelled before the renewal date."
+      },
+      "acceptableUse": {
+        "title": "Acceptable Use",
+        "intro": "You agree not to:",
+        "prohibited": {
+          "illegal": "Use the service for illegal purposes",
+          "unauthorized": "Access databases without proper authorization",
+          "interfere": "Interfere with or disrupt the service",
+          "reverseEngineer": "Reverse engineer or attempt to extract source code",
+          "resell": "Resell or redistribute the service without authorization",
+          "malicious": "Upload malicious code or harmful content"
+        }
+      },
+      "dataHandling": {
+        "title": "Data Handling",
+        "items": {
+          "ownership": "You retain ownership of all data in your connected databases",
+          "credentials": "Database credentials are encrypted and stored securely",
+          "queries": "Query history and chat sessions are stored to provide service functionality",
+          "responsibility": "You are responsible for compliance with data protection laws applicable to your data"
+        }
+      },
+      "intellectualProperty": {
+        "title": "Intellectual Property",
+        "content": "SQLSphere, including its software, design, and content, is protected by intellectual property laws. You may not copy, modify, or distribute our service without authorization."
+      },
+      "disclaimer": {
+        "title": "Disclaimer of Warranties",
+        "content": "The service is provided \"as is\" without warranties of any kind. We do not guarantee:",
+        "items": {
+          "aiAccuracy": "100% accuracy of AI-generated SQL queries",
+          "databaseChanges": "That database modifications will produce intended results",
+          "availability": "Uninterrupted service availability"
+        }
+      },
+      "limitation": {
+        "title": "Limitation of Liability",
+        "content": "To the maximum extent permitted by law, SQLSphere shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including data loss or corruption, arising from your use of the service."
+      },
+      "indemnification": {
+        "title": "Indemnification",
+        "content": "You agree to indemnify and hold harmless SQLSphere and its affiliates from any claims, damages, or expenses arising from your use of the service or violation of these terms."
+      },
+      "termination": {
+        "title": "Termination",
+        "content": "We may suspend or terminate your access for violation of these terms. You may cancel your account at any time through your profile settings."
+      },
+      "changes": {
+        "title": "Changes to Terms",
+        "content": "We may update these terms from time to time. We will notify you of significant changes via email or through the service. Continued use after changes constitutes acceptance."
+      },
+      "governingLaw": {
+        "title": "Governing Law",
+        "content": "These terms are governed by the laws of [Your Jurisdiction]. Any disputes shall be resolved in the courts of [Your Jurisdiction]."
+      },
+      "contact": {
+        "title": "Contact Information",
+        "content": "For questions about these terms, please contact us:"
+      }
+    }
+  },
+  "privacyPolicy": {
+    "title": "Privacy Policy",
+    "lastUpdated": "Last Updated",
+    "sections": {
+      "introduction": {
+        "title": "Introduction",
+        "content": "SQLSphere is committed to protecting your privacy. This Privacy Policy explains how we collect, use, store, and protect your personal information when you use our AI-powered database query platform."
+      },
+      "dataCollected": {
+        "title": "Information We Collect",
+        "accountInfo": {
+          "title": "Account Information",
+          "items": {
+            "email": "Email address",
+            "name": "Name (if provided)",
+            "password": "Password (hashed and salted)",
+            "oauth": "OAuth provider data (Google, GitHub) if using social login"
+          }
+        },
+        "connectionData": {
+          "title": "Database Connection Data",
+          "items": {
+            "credentials": "Database credentials (encrypted with AES-256)",
+            "metadata": "Connection metadata (host, port, database name)",
+            "ssh": "SSH tunnel credentials (if used, encrypted)"
+          }
+        },
+        "usageData": {
+          "title": "Usage Data",
+          "items": {
+            "chatHistory": "Chat session history and messages",
+            "queries": "SQL queries generated and executed",
+            "imports": "Data import history (file names, row counts)",
+            "visualizations": "Visualization preferences"
+          }
+        },
+        "technicalData": {
+          "title": "Technical Data",
+          "items": {
+            "ip": "IP address",
+            "browser": "Browser type and version",
+            "device": "Device information",
+            "logs": "Access logs and timestamps"
+          }
+        }
+      },
+      "howWeUse": {
+        "title": "How We Use Your Information",
+        "items": {
+          "service": "Provide and maintain the service",
+          "connections": "Facilitate database connections and queries",
+          "queries": "Process your natural language queries",
+          "improve": "Improve and optimize our AI models",
+          "communicate": "Communicate with you about your account",
+          "security": "Detect and prevent fraud and abuse",
+          "legal": "Comply with legal obligations"
+        }
+      },
+      "dataSecurity": {
+        "title": "Data Security",
+        "intro": "We implement robust security measures to protect your data:",
+        "items": {
+          "encryption": "AES-256 encryption for database credentials at rest",
+          "transit": "TLS/SSL encryption for all data in transit",
+          "serverSide": "Server-side credential handling (never exposed to client)",
+          "sessions": "Session timeout after 30 minutes of inactivity",
+          "rls": "Row-level security in our database"
+        }
+      },
+      "dataSharing": {
+        "title": "Data Sharing",
+        "intro": "We do not sell your personal data. We may share data with:",
+        "providers": {
+          "title": "Service Providers",
+          "content": "Supabase (database hosting), hosting providers"
+        },
+        "payment": {
+          "title": "Payment Processors",
+          "content": "Stripe for subscription payments"
+        },
+        "legal": {
+          "title": "Legal Requirements",
+          "content": "When required by law or to protect our rights"
+        }
+      },
+      "dataRetention": {
+        "title": "Data Retention",
+        "items": {
+          "account": "Account data is retained while your account is active",
+          "chat": "Chat history is retained for service functionality",
+          "logs": "Technical logs are retained for 90 days",
+          "deletion": "Upon account deletion, personal data is removed within 30 days"
+        }
+      },
+      "yourRights": {
+        "title": "Your Rights (GDPR/CCPA)",
+        "intro": "You have the right to:",
+        "rights": {
+          "access": {
+            "title": "Access",
+            "content": "Request a copy of your personal data"
+          },
+          "rectification": {
+            "title": "Rectification",
+            "content": "Correct inaccurate personal data"
+          },
+          "erasure": {
+            "title": "Erasure",
+            "content": "Request deletion of your personal data"
+          },
+          "portability": {
+            "title": "Data Portability",
+            "content": "Receive your data in a structured format"
+          },
+          "withdraw": {
+            "title": "Withdraw Consent",
+            "content": "Withdraw consent at any time"
+          }
+        }
+      },
+      "cookies": {
+        "title": "Cookies and Tracking",
+        "intro": "We use essential cookies for:",
+        "types": {
+          "essential": {
+            "title": "Essential Cookies",
+            "content": "Session management and authentication"
+          },
+          "preferences": {
+            "title": "Preference Cookies",
+            "content": "Language and theme preferences"
+          }
+        }
+      },
+      "international": {
+        "title": "International Data Transfers",
+        "content": "Your data may be transferred to and processed in countries outside your residence. We ensure appropriate safeguards are in place for such transfers."
+      },
+      "children": {
+        "title": "Children's Privacy",
+        "content": "Our service is not intended for children under 16. We do not knowingly collect data from children under 16."
+      },
+      "changes": {
+        "title": "Changes to This Policy",
+        "content": "We may update this Privacy Policy from time to time. We will notify you of significant changes via email or through the service."
+      },
+      "contact": {
+        "title": "Contact Us",
+        "content": "For privacy-related inquiries:",
+        "dpo": "Data Protection Officer"
+      }
+    }
+  },
+  "imprint": {
+    "title": "Legal Disclosure (Imprint)",
+    "sections": {
+      "companyInfo": {
+        "title": "Company Information",
+        "fields": {
+          "companyName": "Company Name",
+          "legalForm": "Legal Form",
+          "address": "Address"
+        }
+      },
+      "contact": {
+        "title": "Contact",
+        "fields": {
+          "phone": "Phone",
+          "email": "Email",
+          "website": "Website"
+        }
+      },
+      "representatives": {
+        "title": "Authorized Representatives",
+        "fields": {
+          "managingDirector": "Managing Director",
+          "authorizedRep": "Authorized Representative(s)"
+        }
+      },
+      "registration": {
+        "title": "Commercial Register Entry",
+        "fields": {
+          "registerCourt": "Register Court",
+          "registerNumber": "Register Number"
+        }
+      },
+      "taxInfo": {
+        "title": "Tax Information",
+        "fields": {
+          "vatId": "VAT Identification Number",
+          "taxNumber": "Tax Number"
+        }
+      },
+      "responsibleContent": {
+        "title": "Responsible for Content",
+        "description": "According to § 55 Abs. 2 RStV:",
+        "fields": {
+          "name": "Name",
+          "address": "Address"
+        }
+      },
+      "disputeResolution": {
+        "title": "EU Dispute Resolution",
+        "euPlatform": "The European Commission provides a platform for online dispute resolution (OS):",
+        "noParticipation": "We are not obligated and not willing to participate in dispute resolution proceedings before a consumer arbitration board."
+      },
+      "liability": {
+        "title": "Liability for Content",
+        "ownContent": "As a service provider, we are responsible for our own content on these pages according to general laws. However, we are not obligated to monitor transmitted or stored third-party information.",
+        "externalLinks": "Our offering contains links to external websites of third parties. We have no influence on their content. The respective provider or operator is always responsible for the content of linked pages."
+      },
+      "copyright": {
+        "title": "Copyright",
+        "content": "The content and works on these pages created by the site operators are subject to copyright law. Reproduction, editing, distribution, and any kind of use outside the limits of copyright law require written consent."
+      }
+    }
+  },
+  "about": {
+    "title": "About SQLSphere",
+    "sections": {
+      "whatIs": {
+        "title": "What is SQLSphere?",
+        "content": "SQLSphere is an AI-powered platform that transforms how you interact with your databases. Instead of writing complex SQL queries, simply ask questions in natural language and get instant results. Our intelligent assistant understands your database structure and generates optimized queries for you."
+      },
+      "mission": {
+        "title": "Our Mission",
+        "content": "We believe everyone should be able to access and analyze their data without needing to be a SQL expert. Our mission is to democratize data access by making database interactions as simple as having a conversation."
+      },
+      "features": {
+        "title": "Key Features"
+      },
+      "supportedDatabases": {
+        "title": "Supported Databases",
+        "intro": "We currently support the following database systems:",
+        "postgresql": "Advanced open-source relational database",
+        "mysql": "Popular open-source database system",
+        "sqlserver": "Microsoft's enterprise database solution",
+        "details": {
+          "title": "Database Support Details",
+          "postgresql": {
+            "name": "PostgreSQL",
+            "connectionMethods": {
+              "standard": "✅ Standard TCP/IP Connection",
+              "ssh": "✅ SSH Tunnel Connection",
+              "socket": "❌ Local Socket Connection (Not implemented)"
+            },
+            "features": {
+              "aiChat": "✅ Full AI chat support",
+              "visualization": "✅ Schema visualization",
+              "dataImport": "✅ CSV, Excel, JSON, SQL import",
+              "ssl": "✅ SSL/TLS encryption support",
+              "schema": "✅ Multi-schema support"
+            }
+          },
+          "mysql": {
+            "name": "MySQL",
+            "connectionMethods": {
+              "standard": "✅ Standard TCP/IP Connection",
+              "ssh": "✅ SSH Tunnel Connection",
+              "socket": "❌ Local Socket Connection (Not implemented)"
+            },
+            "features": {
+              "aiChat": "✅ Full AI chat support",
+              "visualization": "✅ Schema visualization",
+              "dataImport": "✅ CSV, Excel, JSON, SQL import",
+              "ssl": "✅ SSL/TLS encryption support",
+              "schema": "✅ Multi-schema support"
+            }
+          },
+          "sqlserver": {
+            "name": "SQL Server",
+            "connectionMethods": {
+              "standard": "✅ Standard TCP/IP Connection",
+              "ssh": "✅ SSH Tunnel Connection",
+              "socket": "❌ Local Socket Connection (Not implemented)"
+            },
+            "features": {
+              "aiChat": "✅ Full AI chat support",
+              "visualization": "✅ Schema visualization",
+              "dataImport": "✅ CSV, Excel, JSON, SQL import",
+              "ssl": "✅ SSL/TLS encryption support",
+              "schema": "✅ Multi-schema support"
+            }
+          },
+          "oracle": {
+            "name": "Oracle Database",
+            "connectionMethods": {
+              "standard": "❌ Not implemented",
+              "ssh": "❌ Not implemented",
+              "socket": "❌ Not implemented"
+            },
+            "features": {
+              "aiChat": "❌ Not implemented",
+              "visualization": "❌ Not implemented",
+              "dataImport": "❌ Not implemented",
+              "ssl": "❌ Not implemented",
+              "schema": "❌ Not implemented"
+            },
+            "note": "Oracle Database support is planned for future releases."
+          }
+        }
+      },
+      "howItWorks": {
+        "title": "How It Works",
+        "steps": {
+          "connect": {
+            "title": "Connect Your Database",
+            "description": "Securely connect to your database using credentials or SSH tunneling. All credentials are encrypted."
+          },
+          "ask": {
+            "title": "Ask Questions",
+            "description": "Type your questions in natural language. Our AI understands context and generates accurate SQL queries."
+          },
+          "visualize": {
+            "title": "Visualize Structure",
+            "description": "Explore your database schema with interactive visualizations showing tables, relationships, and dependencies."
+          },
+          "manage": {
+            "title": "Import & Manage Data",
+            "description": "Import data from CSV, Excel, and other formats. Safely modify data with confirmation workflows."
+          }
+        }
+      },
+      "security": {
+        "title": "Security First",
+        "intro": "Your data security is our top priority:",
+        "items": {
+          "encryption": "All credentials encrypted with AES-256",
+          "serverSide": "Server-side credential handling only",
+          "noStorage": "We never store your actual database data",
+          "sessionTimeout": "Automatic session timeout after 30 minutes",
+          "confirmation": "Two-step confirmation for all data modifications"
+        }
+      },
+      "contact": {
+        "title": "Get in Touch",
+        "content": "Have questions or feedback? We'd love to hear from you!",
+        "support": "Support",
+        "sales": "Sales",
+        "general": "General Inquiries"
+      }
+    },
+    "features": {
+      "connections": {
+        "title": "Secure Connections",
+        "description": "Connect to PostgreSQL, MySQL, and SQL Server with encrypted credentials and SSH tunnel support."
+      },
+      "chat": {
+        "title": "AI-Powered Chat",
+        "description": "Ask questions in natural language and get accurate SQL queries and results instantly."
+      },
+      "visualization": {
+        "title": "Schema Visualization",
+        "description": "Interactive graphs showing tables, relationships, and column dependencies."
+      },
+      "import": {
+        "title": "Data Import",
+        "description": "Import data from CSV, Excel, JSON, and SQL files with smart column mapping."
+      },
+      "security": {
+        "title": "Enterprise Security",
+        "description": "AES-256 encryption, server-side credential handling, and automatic session timeouts."
+      },
+      "performance": {
+        "title": "Optimized Performance",
+        "description": "Fast query execution with intelligent caching and pagination."
+      }
+    }
+  },
+  "errors": {
+    "connectionError": "Something went wrong. Please try again.",
+    "networkError": "Connection failed. Please check your internet connection.",
+    "authError": "Session expired. Please log in again.",
+    "notFoundError": "The requested resource was not found.",
+    "serverError": "Server is temporarily unavailable. Please try again later.",
+    "databaseError": "Unable to connect to the database. Please check your connection settings.",
+    "rateLimitError": "Too many requests. Please wait a moment and try again.",
+    "genericError": "Something went wrong. Please try again."
+  },
+  "contact": {
+    "form": {
+      "title": "Contact Us",
+      "description": "Have questions or feedback? We'd love to hear from you.",
+      "name": "Your Name",
+      "namePlaceholder": "John Doe",
+      "email": "Email Address",
+      "emailPlaceholder": "john@example.com",
+      "subject": "Subject",
+      "subjectPlaceholder": "How can we help?",
+      "message": "Message",
+      "messagePlaceholder": "Tell us more about your inquiry...",
+      "send": "Send Message",
+      "sending": "Sending..."
+    },
+    "success": {
+      "title": "Message Sent",
+      "description": "Thank you for reaching out! We'll get back to you soon."
+    },
+    "error": {
+      "title": "Failed to Send",
+      "description": "Something went wrong. Please try again later."
+    }
+  },
+  "queryHistory": {
+    "title": "Query History",
+    "history": "History",
+    "favorites": "Favorites",
+    "searchPlaceholder": "Search queries...",
+    "noEntries": "No queries found",
+    "copied": "SQL copied to clipboard"
+  },
+  "shareDialog": {
+    "title": "Share Query Results",
+    "queryTitle": "Title",
+    "titlePlaceholder": "Give your shared query a title",
+    "titleRequired": "Title is required",
+    "expiresIn": "Expires in",
+    "day": "day",
+    "days": "days",
+    "createLink": "Create Link",
+    "linkCopied": "Link copied to clipboard",
+    "error": "Failed to create share link"
+  },
+  "sharedView": {
+    "sharedQuery": "Shared Query",
+    "expired": "Link Expired",
+    "expiredDesc": "This shared query link has expired or does not exist.",
+    "results": "Results"
+  },
+  "schedules": {
+    "title": "Scheduled Reports",
+    "create": "Create",
+    "createSchedule": "Create Schedule",
+    "name": "Name",
+    "connection": "Connection",
+    "selectConnection": "Select connection",
+    "frequency": "Frequency",
+    "time": "Time",
+    "dayOfWeek": "Day of week",
+    "dayOfMonth": "Day of month",
+    "emailRecipients": "Email recipients",
+    "format": "Output format",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "active": "Active",
+    "paused": "Paused",
+    "nextRun": "Next run",
+    "runNow": "Run now",
+    "runHistory": "Run History",
+    "noRuns": "No runs yet",
+    "created": "Schedule created",
+    "createError": "Failed to create schedule",
+    "running": "Running schedule...",
+    "runComplete": "Schedule completed",
+    "runError": "Schedule run failed",
+    "mode": "Mode",
+    "modeManualSql": "Manual SQL",
+    "modeNaturalLanguage": "Natural language",
+    "naturalLanguagePrompt": "Describe your report",
+    "promptPlaceholder": "e.g. Show monthly revenue by region",
+    "generateSql": "Generate SQL",
+    "sqlGenerated": "SQL generated",
+    "generateError": "Failed to generate SQL",
+    "preview": "Preview",
+    "previewReady": "Preview ready",
+    "previewError": "Preview failed",
+    "previewRequired": "Run preview before creating the report",
+    "previewRows": "{{count}} rows in preview",
+    "previewTruncated": "Preview is truncated",
+    "reportDescription": "Report description for email",
+    "reportDescriptionPlaceholder": "Optional context sentence shown in the email",
+    "includeChart": "Include chart in email",
+    "chartType": "Chart type",
+    "chartTitle": "Chart title",
+    "chartEnabled": "chart enabled",
+    "auto": "Auto",
+    "localNotSupported": "This feature is not supported for local agent connections yet",
+    "fillRequired": "Please fill all required fields",
+    "dataPreview": "Data",
+    "emailPreview": "Email",
+    "csvAttachmentNote": "Full result is attached as CSV.",
+    "sun": "Sun", "mon": "Mon", "tue": "Tue", "wed": "Wed", "thu": "Thu", "fri": "Fri", "sat": "Sat",
+    "dayN": "Day {{n}}"
+  },
+  "alerts": {
+    "title": "Data Alerts",
+    "create": "Create",
+    "createAlert": "Create Alert",
+    "name": "Name",
+    "connection": "Connection",
+    "selectConnection": "Select connection",
+    "condition": "Condition (natural language)",
+    "conditionPlaceholder": "e.g. When orders exceed 1000 in the last hour",
+    "sqlPlaceholder": "SELECT COUNT(*) FROM orders WHERE created_at > NOW() - INTERVAL '1 hour' HAVING COUNT(*) > 1000",
+    "checkInterval": "Check interval",
+    "emailRecipients": "Email recipients",
+    "active": "Active",
+    "paused": "Paused",
+    "every": "Every",
+    "lastChecked": "Last checked",
+    "lastTriggered": "Last triggered",
+    "created": "Alert created",
+    "createError": "Failed to create alert",
+    "mode": "Mode",
+    "modeManualSql": "Manual SQL",
+    "modeNaturalLanguage": "Natural language",
+    "naturalLanguagePrompt": "Describe your alert query",
+    "promptPlaceholder": "e.g. Find customers with overdue invoices",
+    "generateSql": "Generate SQL",
+    "sqlGenerated": "SQL generated",
+    "generateError": "Failed to generate SQL",
+    "preview": "Preview",
+    "previewReady": "Preview ready",
+    "previewError": "Preview failed",
+    "previewRequired": "Run preview before creating the alert",
+    "previewRows": "{{count}} rows in preview",
+    "previewTruncated": "Preview is truncated",
+    "localNotSupported": "This feature is not supported for local agent connections yet",
+    "fillRequired": "Please fill all required fields"
+  },
+  "dashboards": {
+    "title": "Dashboards",
+    "createDashboard": "Create Dashboard",
+    "selectDashboard": "Select dashboard",
+    "addWidget": "Add Widget",
+    "name": "Name",
+    "connection": "Connection",
+    "selectConnection": "Select connection",
+    "create": "Create",
+    "widgetPrompt": "Describe what you want to see",
+    "promptPlaceholder": "e.g. Show monthly revenue as a bar chart",
+    "generate": "Generate",
+    "analyze": "Analyze",
+    "reanalyze": "Re-analyze",
+    "confirmAndCreate": "Confirm and create",
+    "analysisReady": "Analysis ready",
+    "planTitle": "Proposed widget plan",
+    "chartType": "Chart type",
+    "metricDefinition": "Metric definition",
+    "requiredColumns": "Required columns",
+    "suggestedFilters": "Suggested filters",
+    "displayReason": "Why this display type",
+    "proposedSql": "Proposed SQL",
+    "widgetAdded": "Widget added",
+    "widgetError": "Failed to generate widget",
+    "refreshError": "Failed to refresh widget",
+    "noData": "No data yet. Click refresh.",
+    "empty": "No dashboards yet",
+    "emptyDesc": "Create your first dashboard to visualize your data with AI-generated charts.",
+    "deleteDashboard": "Delete",
+    "confirmDelete": "Are you sure you want to delete this dashboard? All its widgets will also be removed.",
+    "deleted": "Dashboard deleted"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAllRead": "Mark all read",
+    "empty": "No notifications"
+  }
+}

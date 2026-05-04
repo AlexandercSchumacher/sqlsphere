@@ -1,0 +1,84 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+# `lib/` (Python build artifact) — anchored to repo root only,
+# otherwise it would also ignore frontend `src/lib/`.
+/lib/
+/lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.connection-matrix
+.env.connection-matrix.local
+
+# Node / Vite
+node_modules/
+lovable/**/dist/
+lovable/**/node_modules/
+*.tsbuildinfo
+
+# Supabase CLI internal state
+lovable/**/supabase/.temp/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# R
+.Rhistory
+
+# Logs
+*.log
+
+# Local databases / dumps
+*.db
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+temp/
+
+# Test caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Agent binaries
+SQLSphere-Agent
+SQLSphere-Agent.exe
+SQLSphere-Agent.app/
+
+# Internal tooling
+.claude/

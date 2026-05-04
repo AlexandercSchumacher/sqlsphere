@@ -1,0 +1,82 @@
+profiles:
+  core:
+    db_types: [mysql, postgresql, sqlserver]
+    connection_methods:
+      mysql: [standard, ssh, socket, pipe]
+      postgresql: [standard, ssh, socket]
+      sqlserver: [standard, ssh, pipe]
+    auth_methods:
+      mysql: [sql_auth, ssl_cert, connection_string]
+      postgresql: [sql_auth, ssl_cert, connection_string]
+      sqlserver: [sql_auth, connection_string]
+    tls_variants:
+      mysql: [none, basic_ssl, mode_require, cert_path, cert_pem]
+      postgresql: [none, basic_ssl, mode_require, cert_path, cert_pem]
+      sqlserver: [none, sqlserver_encrypt_yes, sqlserver_encrypt_strict]
+
+  aws:
+    db_types: [mysql, postgresql]
+    connection_methods:
+      mysql: [standard, ssh]
+      postgresql: [standard, ssh]
+    auth_methods:
+      mysql: [aws_iam]
+      postgresql: [aws_iam]
+    tls_variants:
+      mysql: [basic_ssl]
+      postgresql: [basic_ssl]
+
+  azure_ad:
+    db_types: [postgresql, sqlserver]
+    connection_methods:
+      postgresql: [standard, ssh]
+      sqlserver: [standard, ssh, pipe]
+    auth_methods:
+      postgresql: [azure_ad_password, azure_ad_sp]
+      sqlserver: [azure_ad_password, azure_ad_integrated, azure_ad_mfa, azure_ad_sp, azure_ad_mi]
+    tls_variants:
+      # Azure managed databases enforce encrypted transport.
+      postgresql: [basic_ssl]
+      sqlserver: [sqlserver_encrypt_yes]
+
+  kerberos_windows:
+    db_types: [postgresql, sqlserver]
+    connection_methods:
+      postgresql: [standard]
+      sqlserver: [standard, pipe]
+    auth_methods:
+      postgresql: [kerberos]
+      sqlserver: [kerberos, windows_auth]
+    tls_variants:
+      postgresql: [none, basic_ssl]
+      sqlserver: [none, sqlserver_encrypt_yes]
+
+  ci_tls_connection_string:
+    db_types: [mysql, postgresql, sqlserver]
+    connection_methods:
+      mysql: [standard]
+      postgresql: [standard]
+      sqlserver: [standard]
+    auth_methods:
+      mysql: [sql_auth, connection_string]
+      postgresql: [sql_auth, connection_string]
+      sqlserver: [sql_auth, connection_string]
+    tls_variants:
+      mysql: [none, basic_ssl, mode_require]
+      postgresql: [none]
+      sqlserver: [none, sqlserver_encrypt_yes]
+
+  ci_ssh:
+    db_types: [mysql, postgresql, sqlserver]
+    connection_methods:
+      mysql: [ssh]
+      postgresql: [ssh]
+      sqlserver: [ssh]
+    auth_methods:
+      mysql: [sql_auth]
+      postgresql: [sql_auth]
+      sqlserver: [sql_auth]
+    tls_variants:
+      mysql: [none]
+      postgresql: [none]
+      sqlserver: [none]

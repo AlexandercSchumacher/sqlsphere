@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Visualization - Example Frontend</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .controls {
+            background: white;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .controls label {
+            display: inline-block;
+            margin-right: 10px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .controls select, .controls input {
+        
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+        
+        .controls button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .controls button:hover {
+            background: #5568d3;
+        }
+        
+        .stats {
+            background: white;
+            padding: 15px 20px;
+            margin: 0 20px 20px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+        }
+        
+        iframe {
+            width: calc(100% - 40px);
+            height: 700px;
+            border: none;
+            margin: 0 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background: white;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #666;
+        }
+        
+        .error {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🗂️ Database Visualization</h1>
+        <p>Interactive dependency diagrams for your database</p>
+    </header>
+    
+    <div class="controls">
+        <label for="level">Level:</label>
+        <select id="level">
+            <option value="database">Database (Schemas)</option>
+            <option value="table" selected>Table (Relationships)</option>
+            <option value="column">Column (Details)</option>
+        </select>
+        
+        <label for="filter">Filter (optional):</label>
+        <input type="text" id="filter" placeholder="e.g., employees or employees.employees">
+        
+        <label for="database">Database:</label>
+        <select id="database">
+            <option value="mysql" selected>MySQL</option>
+            <option value="sqlserver">SQL Server</option>
+        </select>
+        
+        <button onclick="loadVisualization()">🔄 Load Visualization</button>
+        <button onclick="loadStats()">📊 Get Stats</button>
+    </div>
+    
+    <div id="stats" class="stats" style="display: none;">
+        <div class="stat-item">
+            <div class="stat-value" id="nodeCount">-</div>
+            <div class="stat-label">Nodes</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="edgeCount">-</div>
+            <div class="stat-label">Edges</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="tableCount">-</div>
+            <div class="stat-label">Tables</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="viewCount">-</div>
+            <div class="stat-label">Views</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="columnCount">-</div>
+            <div class="stat-label">Columns</div>
+        </div>
+    </div>
+    
+    <div id="error" class="error" style="display: none;"></div>
+    
+    <div id="loading" class="loading" style="display: none;">
+        <h3>⏳ Loading visualization...</h3>
+    </div>
+    
+    <iframe id="visualization" style="display: none;"></iframe>
+    
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        
+        function loadVisualization() {
+            const level = document.getElementById('level').value;
+            const filter = document.getElementById('filter').value.trim();
+            const database = document.getElementById('database').value;
+            
+            // Build URL
+            let url = `${API_BASE}/visualization/html?level=${level}&database=${database}`;
+            if (filter) {
+                url += `&filter_obj=${encodeURIComponent(filter)}`;
+            }
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('visualization').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            
+            // Load in iframe
+            const iframe = document.getElementById('visualization');
+            iframe.src = url;
+            
+            iframe.onload = function() {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('visualization').style.display = 'block';
+                loadStats();
+            };
+            
+            iframe.onerror = function() {
+                document.getElementById('loading').style.display = 'none';
+                showError('Failed to load visualization. Make sure the API is running.');
+            };
+        }
+        
+        function loadStats() {
+            const level = document.getElementById('level').value;
+            const filter = document.getElementById('filter').value.trim();
+            const database = document.getElementById('database').value;
+            
+            let url = `${API_BASE}/visualization/data?level=${level}&database=${database}`;
+            if (filter) {
+                url += `&filter_obj=${encodeURIComponent(filter)}`;
+            }
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('stats').style.display = 'flex';
+                    document.getElementById('nodeCount').textContent = data.stats.node_count;
+                    document.getElementById('edgeCount').textContent = data.stats.edge_count;
+                    document.getElementById('tableCount').textContent = data.stats.table_count;
+                    document.getElementById('viewCount').textContent = data.stats.view_count;
+                    document.getElementById('columnCount').textContent = data.stats.column_count;
+                })
+                .catch(error => {
+                    showError('Failed to load stats: ' + error.message);
+                });
+        }
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = '❌ ' + message;
+            errorDiv.style.display = 'block';
+        }
+        
+        // Load default visualization on page load
+        window.addEventListener('load', function() {
+            loadVisualization();
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,524 @@
+name: Connection Matrix Tests
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+jobs:
+  core:
+    name: Core Matrix (Docker)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ODBC drivers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl gnupg2 apt-transport-https unixodbc-dev
+          source /etc/os-release
+          curl -sSL -O https://packages.microsoft.com/config/ubuntu/${VERSION_ID}/packages-microsoft-prod.deb
+          sudo dpkg -i packages-microsoft-prod.deb
+          rm packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 odbc-postgresql odbc-mariadb
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r tests/requirements-test.txt
+
+      - name: Trust SQL Server test CA
+        run: |
+          sudo cp tests/certs/sqlserver/ca.pem /usr/local/share/ca-certificates/sqlsphere-sqlserver-test-ca.crt
+          sudo update-ca-certificates
+
+      - name: Prepare local socket directories
+        run: |
+          mkdir -p tests/mysql-run tests/postgresql-run
+          chmod 777 tests/mysql-run tests/postgresql-run
+          rm -f tests/mysql-run/* tests/postgresql-run/*
+
+      - name: Export PEM cert environment variables
+        run: |
+          {
+            echo "TEST_MYSQL_SSL_CA<<EOF"
+            cat tests/certs/ca/ca.pem
+            echo "EOF"
+            echo "TEST_MYSQL_SSL_CERT<<EOF"
+            cat tests/certs/mysql/client-cert.pem
+            echo "EOF"
+            echo "TEST_MYSQL_SSL_KEY<<EOF"
+            cat tests/certs/mysql/client-key.pem
+            echo "EOF"
+            echo "TEST_POSTGRESQL_SSL_CA<<EOF"
+            cat tests/certs/ca/ca.pem
+            echo "EOF"
+            echo "TEST_POSTGRESQL_SSL_CERT<<EOF"
+            cat tests/certs/postgresql/client-cert.pem
+            echo "EOF"
+            echo "TEST_POSTGRESQL_SSL_KEY<<EOF"
+            cat tests/certs/postgresql/client-key.pem
+            echo "EOF"
+          } >> "$GITHUB_ENV"
+
+      - name: Start database containers
+        run: docker compose -f tests/docker-compose.test.yml up -d --build --wait
+
+      - name: Wait for SSH bastion
+        run: |
+          for i in {1..60}; do
+            if (echo > /dev/tcp/127.0.0.1/2222) >/dev/null 2>&1; then
+              echo "SSH bastion is reachable on 127.0.0.1:2222"
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "SSH bastion did not become reachable in time"
+          exit 1
+
+      - name: Run core matrix tests
+        env:
+          FASTAPI_AUTH_TOKEN: ${{ secrets.FASTAPI_AUTH_TOKEN }}
+
+          TEST_MYSQL_HOST: 127.0.0.1
+          TEST_MYSQL_PORT: "3306"
+          TEST_MYSQL_DATABASE: sqlsphere_mysql
+          TEST_MYSQL_USERNAME: sqlsphere_user
+          TEST_MYSQL_PASSWORD: sqlsphere_mysql_pass
+
+          TEST_POSTGRESQL_HOST: 127.0.0.1
+          TEST_POSTGRESQL_PORT: "5432"
+          TEST_POSTGRESQL_DATABASE: sqlsphere_pg
+          TEST_POSTGRESQL_USERNAME: sqlsphere_pg
+          TEST_POSTGRESQL_PASSWORD: sqlsphere_pg_pass
+
+          TEST_SQLSERVER_HOST: 127.0.0.1
+          TEST_SQLSERVER_PORT: "1433"
+          TEST_SQLSERVER_DATABASE: master
+          TEST_SQLSERVER_USERNAME: sa
+          TEST_SQLSERVER_PASSWORD: SqlSphereStrongPass!123
+          TEST_MYSQL_CONNECTION_STRING: 'DRIVER={MariaDB Unicode};SERVER=127.0.0.1;PORT=3306;DATABASE=sqlsphere_mysql;UID=sqlsphere_user;PWD=sqlsphere_mysql_pass;OPTION=3;'
+          TEST_POSTGRESQL_CONNECTION_STRING: 'DRIVER={PostgreSQL Unicode};SERVER=127.0.0.1;PORT=5432;DATABASE=sqlsphere_pg;UID=sqlsphere_pg;PWD=sqlsphere_pg_pass;'
+          TEST_SQLSERVER_CONNECTION_STRING: 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=127.0.0.1,1433;DATABASE=master;UID=sa;PWD=SqlSphereStrongPass!123;Encrypt=no;TrustServerCertificate=yes;'
+
+          TEST_MYSQL_SOCKET_PATH: ${{ github.workspace }}/tests/mysql-run/mysqld.sock
+          TEST_POSTGRESQL_SOCKET_PATH: ${{ github.workspace }}/tests/postgresql-run
+          TEST_MYSQL_NAMED_PIPE: ${{ github.workspace }}/tests/mysql-run/mysqld.sock
+
+          TEST_MYSQL_RUN_BASIC_SSL: "true"
+          TEST_MYSQL_RUN_SSL_MODE: "true"
+          TEST_MYSQL_SSL_MODE: required
+          TEST_MYSQL_RUN_CERT_PATH: "true"
+          TEST_MYSQL_SSL_CA_PATH: ${{ github.workspace }}/tests/certs/ca/ca.pem
+          TEST_MYSQL_SSL_CERT_PATH: ${{ github.workspace }}/tests/certs/mysql/client-cert.pem
+          TEST_MYSQL_SSL_KEY_PATH: ${{ github.workspace }}/tests/certs/mysql/client-key.pem
+          TEST_MYSQL_RUN_CERT_PEM: "true"
+
+          TEST_POSTGRESQL_RUN_BASIC_SSL: "true"
+          TEST_POSTGRESQL_RUN_SSL_MODE: "true"
+          TEST_POSTGRESQL_SSL_MODE: require
+          TEST_POSTGRESQL_RUN_CERT_PATH: "true"
+          TEST_POSTGRESQL_SSL_CA_PATH: ${{ github.workspace }}/tests/certs/ca/ca.pem
+          TEST_POSTGRESQL_SSL_CERT_PATH: ${{ github.workspace }}/tests/certs/postgresql/client-cert.pem
+          TEST_POSTGRESQL_SSL_KEY_PATH: ${{ github.workspace }}/tests/certs/postgresql/client-key.pem
+          TEST_POSTGRESQL_RUN_CERT_PEM: "true"
+
+          TEST_SQLSERVER_RUN_TLS: "true"
+          # TDS 8.0 (Encrypt=strict) is not supported by the SQL Server 2022
+          # Linux Docker image — see https://github.com/microsoft/mssql-docker/issues/878
+          # Enable this once Microsoft adds TDS 8.0 support to the Linux container.
+          TEST_SQLSERVER_RUN_STRICT_TLS: "false"
+          TEST_SQLSERVER_TRUST_SERVER_CERT: "true"
+          TEST_SQLSERVER_STRICT_TRUST_SERVER_CERT: "false"
+
+          TEST_SSH_HOST: 127.0.0.1
+          TEST_SSH_PORT: "2222"
+          TEST_SSH_USERNAME: sqlsphere
+          TEST_SSH_PASSWORD: sqlsphere_ssh_pass
+          TEST_MYSQL_SSH_DB_HOST: mysql
+          TEST_POSTGRESQL_SSH_DB_HOST: postgresql
+          TEST_SQLSERVER_SSH_DB_HOST: sqlserver
+
+        run: |
+          pytest \
+            tests/test_connection_matrix.py::test_connection_matrix_core \
+            tests/test_connection_matrix.py::test_invalid_combinations_are_rejected \
+            -q
+
+      - name: Run self-contained TLS/connection_string tests
+        env:
+          FASTAPI_AUTH_TOKEN: ${{ secrets.FASTAPI_AUTH_TOKEN }}
+
+          TEST_MYSQL_HOST: 127.0.0.1
+          TEST_MYSQL_PORT: "3306"
+          TEST_MYSQL_DATABASE: sqlsphere_mysql
+          TEST_MYSQL_USERNAME: sqlsphere_user
+          TEST_MYSQL_PASSWORD: sqlsphere_mysql_pass
+
+          TEST_POSTGRESQL_HOST: 127.0.0.1
+          TEST_POSTGRESQL_PORT: "5432"
+          TEST_POSTGRESQL_DATABASE: sqlsphere_pg
+          TEST_POSTGRESQL_USERNAME: sqlsphere_pg
+          TEST_POSTGRESQL_PASSWORD: sqlsphere_pg_pass
+
+          TEST_SQLSERVER_HOST: 127.0.0.1
+          TEST_SQLSERVER_PORT: "1433"
+          TEST_SQLSERVER_DATABASE: master
+          TEST_SQLSERVER_USERNAME: sa
+          TEST_SQLSERVER_PASSWORD: SqlSphereStrongPass!123
+
+          TEST_MYSQL_CONNECTION_STRING: 'DRIVER={MariaDB Unicode};SERVER=127.0.0.1;PORT=3306;DATABASE=sqlsphere_mysql;UID=sqlsphere_user;PWD=sqlsphere_mysql_pass;OPTION=3;'
+          TEST_POSTGRESQL_CONNECTION_STRING: 'DRIVER={PostgreSQL Unicode};SERVER=127.0.0.1;PORT=5432;DATABASE=sqlsphere_pg;UID=sqlsphere_pg;PWD=sqlsphere_pg_pass;'
+          TEST_SQLSERVER_CONNECTION_STRING: 'DRIVER={ODBC Driver 18 for SQL Server};SERVER=127.0.0.1,1433;DATABASE=master;UID=sa;PWD=SqlSphereStrongPass!123;Encrypt=no;TrustServerCertificate=yes;'
+
+          TEST_MYSQL_RUN_BASIC_SSL: "true"
+          TEST_MYSQL_RUN_SSL_MODE: "true"
+          TEST_POSTGRESQL_RUN_BASIC_SSL: "true"
+          TEST_POSTGRESQL_RUN_SSL_MODE: "true"
+          TEST_SQLSERVER_RUN_TLS: "true"
+          TEST_SQLSERVER_TRUST_SERVER_CERT: "true"
+        run: pytest tests/test_connection_matrix.py::test_connection_matrix_ci_tls_connection_string -q
+
+      - name: Run self-contained SSH tests
+        env:
+          FASTAPI_AUTH_TOKEN: ${{ secrets.FASTAPI_AUTH_TOKEN }}
+
+          TEST_MYSQL_HOST: 127.0.0.1
+          TEST_MYSQL_PORT: "3306"
+          TEST_MYSQL_DATABASE: sqlsphere_mysql
+          TEST_MYSQL_USERNAME: sqlsphere_user
+          TEST_MYSQL_PASSWORD: sqlsphere_mysql_pass
+
+          TEST_POSTGRESQL_HOST: 127.0.0.1
+          TEST_POSTGRESQL_PORT: "5432"
+          TEST_POSTGRESQL_DATABASE: sqlsphere_pg
+          TEST_POSTGRESQL_USERNAME: sqlsphere_pg
+          TEST_POSTGRESQL_PASSWORD: sqlsphere_pg_pass
+
+          TEST_SQLSERVER_HOST: 127.0.0.1
+          TEST_SQLSERVER_PORT: "1433"
+          TEST_SQLSERVER_DATABASE: master
+          TEST_SQLSERVER_USERNAME: sa
+          TEST_SQLSERVER_PASSWORD: SqlSphereStrongPass!123
+
+          TEST_SSH_HOST: 127.0.0.1
+          TEST_SSH_PORT: "2222"
+          TEST_SSH_USERNAME: sqlsphere
+          TEST_SSH_PASSWORD: sqlsphere_ssh_pass
+          TEST_MYSQL_SSH_DB_HOST: mysql
+          TEST_POSTGRESQL_SSH_DB_HOST: postgresql
+          TEST_SQLSERVER_SSH_DB_HOST: sqlserver
+        run: pytest tests/test_connection_matrix.py::test_connection_matrix_ci_ssh -q
+
+      - name: Stop database containers
+        if: always()
+        run: docker compose -f tests/docker-compose.test.yml down -v
+
+  core_windows_sqlserver:
+    name: Core SQL Server (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install SQL Server ODBC Driver 18
+        shell: pwsh
+        run: |
+          choco install sqlserver-odbcdriver -y --no-progress
+          Get-OdbcDriver -Name "*SQL Server*" | Format-Table Name, Platform
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r tests/requirements-test.txt
+
+      - name: Trust SQL Server test certificate
+        shell: pwsh
+        env:
+          CERT_PEM: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_CA_CERT }}
+        run: |
+          if ($env:CERT_PEM) {
+            $certPath = "$env:RUNNER_TEMP\sqlserver-test-ca.cer"
+            $env:CERT_PEM | Out-File -Encoding ascii $certPath
+            Import-Certificate -FilePath $certPath -CertStoreLocation Cert:\LocalMachine\Root | Format-Table Subject, Thumbprint
+            Write-Host "SQL Server test certificate trusted."
+          } else {
+            Write-Host "No SQL Server CA cert configured; skipping."
+          }
+
+      - name: Establish SMB session for SQL Server named pipe
+        shell: pwsh
+        env:
+          TEST_SQLSERVER_HOST: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_HOST }}
+          TEST_CORE_WINDOWS_SQLSERVER_SMB_USERNAME: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_SMB_USERNAME }}
+          TEST_CORE_WINDOWS_SQLSERVER_SMB_PASSWORD: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_SMB_PASSWORD }}
+        run: |
+          if ($env:TEST_CORE_WINDOWS_SQLSERVER_SMB_USERNAME -and $env:TEST_CORE_WINDOWS_SQLSERVER_SMB_PASSWORD) {
+            cmd /c "net use \\$env:TEST_SQLSERVER_HOST\ipc$ /user:$env:TEST_CORE_WINDOWS_SQLSERVER_SMB_USERNAME $env:TEST_CORE_WINDOWS_SQLSERVER_SMB_PASSWORD"
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          } else {
+            Write-Host "SMB credentials not configured; continuing without explicit net use session."
+          }
+
+      - name: Run core SQL Server matrix tests
+        shell: pwsh
+        env:
+          FASTAPI_AUTH_TOKEN: ${{ secrets.FASTAPI_AUTH_TOKEN }}
+
+          TEST_SQLSERVER_HOST: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_HOST }}
+          TEST_SQLSERVER_PORT: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_PORT }}
+          TEST_SQLSERVER_DATABASE: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_DATABASE }}
+          TEST_SQLSERVER_USERNAME: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_USERNAME }}
+          TEST_SQLSERVER_PASSWORD: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_PASSWORD }}
+          TEST_SQLSERVER_NAMED_PIPE: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_NAMED_PIPE }}
+          TEST_SQLSERVER_CONNECTION_STRING: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_CONNECTION_STRING }}
+
+          TEST_SQLSERVER_RUN_TLS: "true"
+          TEST_SQLSERVER_RUN_STRICT_TLS: "true"
+          TEST_SQLSERVER_TRUST_SERVER_CERT: ${{ vars.TEST_CORE_WINDOWS_SQLSERVER_TRUST_SERVER_CERT }}
+
+          TEST_SSH_HOST: ${{ secrets.TEST_AZURE_SSH_HOST }}
+          TEST_SSH_PORT: ${{ secrets.TEST_AZURE_SSH_PORT }}
+          TEST_SSH_USERNAME: ${{ secrets.TEST_AZURE_SSH_USERNAME }}
+          TEST_SSH_PASSWORD: ${{ secrets.TEST_AZURE_SSH_PASSWORD }}
+          TEST_SQLSERVER_SSH_DB_HOST: ${{ secrets.TEST_CORE_WINDOWS_SQLSERVER_HOST }}
+        run: pytest tests/test_connection_matrix.py::test_connection_matrix_core_windows_sqlserver -q
+
+  aws:
+    name: AWS IAM Matrix
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ODBC drivers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl gnupg2 apt-transport-https unixodbc-dev
+          source /etc/os-release
+          curl -sSL -O https://packages.microsoft.com/config/ubuntu/${VERSION_ID}/packages-microsoft-prod.deb
+          sudo dpkg -i packages-microsoft-prod.deb
+          rm packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 odbc-postgresql odbc-mariadb
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r tests/requirements-test.txt
+
+      - name: Prepare AWS SSH key
+        run: |
+          if [ -z "${TEST_AWS_SSH_PASSWORD}" ] && [ -n "${TEST_AWS_SSH_PRIVATE_KEY}" ]; then
+            key_file="$RUNNER_TEMP/sqlsphere_aws_matrix_bastion.pem"
+            printf '%s\n' "${TEST_AWS_SSH_PRIVATE_KEY}" > "$key_file"
+            chmod 600 "$key_file"
+            echo "TEST_SSH_KEY_FILE=$key_file" >> "$GITHUB_ENV"
+          fi
+        env:
+          TEST_AWS_SSH_PASSWORD: ${{ secrets.TEST_AWS_SSH_PASSWORD }}
+          TEST_AWS_SSH_PRIVATE_KEY: ${{ secrets.TEST_AWS_SSH_PRIVATE_KEY }}
+
+      - name: Run AWS matrix tests
+        timeout-minutes: 5
+        env:
+          RUN_AWS_MATRIX: ${{ vars.RUN_AWS_MATRIX }}
+          FASTAPI_AUTH_TOKEN: ${{ secrets.FASTAPI_AUTH_TOKEN }}
+          LIBMYSQL_ENABLE_CLEARTEXT_PLUGIN: "1"
+          AWS_EC2_METADATA_DISABLED: "true"
+
+          TEST_AWS_REGION: ${{ secrets.TEST_AWS_REGION }}
+          TEST_AWS_ACCESS_KEY_ID: ${{ secrets.TEST_AWS_ACCESS_KEY_ID }}
+          TEST_AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_AWS_SECRET_ACCESS_KEY }}
+          TEST_AWS_USE_INSTANCE_PROFILE: ${{ secrets.TEST_AWS_USE_INSTANCE_PROFILE }}
+
+          TEST_AWS_MYSQL_HOST: ${{ secrets.TEST_AWS_MYSQL_HOST }}
+          TEST_AWS_MYSQL_PORT: ${{ secrets.TEST_AWS_MYSQL_PORT }}
+          TEST_AWS_MYSQL_DATABASE: ${{ secrets.TEST_AWS_MYSQL_DATABASE }}
+          TEST_AWS_MYSQL_USERNAME: ${{ secrets.TEST_AWS_MYSQL_USERNAME }}
+
+          TEST_AWS_POSTGRESQL_HOST: ${{ secrets.TEST_AWS_POSTGRESQL_HOST }}
+          TEST_AWS_POSTGRESQL_PORT: ${{ secrets.TEST_AWS_POSTGRESQL_PORT }}
+          TEST_AWS_POSTGRESQL_DATABASE: ${{ secrets.TEST_AWS_POSTGRESQL_DATABASE }}
+          TEST_AWS_POSTGRESQL_USERNAME: ${{ secrets.TEST_AWS_POSTGRESQL_USERNAME }}
+
+          TEST_SSH_HOST: ${{ secrets.TEST_AWS_SSH_HOST }}
+          TEST_SSH_PORT: ${{ secrets.TEST_AWS_SSH_PORT }}
+          TEST_SSH_USERNAME: ${{ secrets.TEST_AWS_SSH_USERNAME }}
+          TEST_SSH_PASSWORD: ${{ secrets.TEST_AWS_SSH_PASSWORD }}
+          TEST_MYSQL_SSH_DB_HOST: ${{ secrets.TEST_AWS_MYSQL_SSH_DB_HOST }}
+          TEST_POSTGRESQL_SSH_DB_HOST: ${{ secrets.TEST_AWS_POSTGRESQL_SSH_DB_HOST }}
+
+          TEST_MYSQL_HOST: ${{ secrets.TEST_AWS_MYSQL_HOST }}
+          TEST_MYSQL_PORT: ${{ secrets.TEST_AWS_MYSQL_PORT }}
+          TEST_MYSQL_DATABASE: ${{ secrets.TEST_AWS_MYSQL_DATABASE }}
+          TEST_MYSQL_USERNAME: ${{ secrets.TEST_AWS_MYSQL_USERNAME }}
+
+          TEST_POSTGRESQL_HOST: ${{ secrets.TEST_AWS_POSTGRESQL_HOST }}
+          TEST_POSTGRESQL_PORT: ${{ secrets.TEST_AWS_POSTGRESQL_PORT }}
+          TEST_POSTGRESQL_DATABASE: ${{ secrets.TEST_AWS_POSTGRESQL_DATABASE }}
+          TEST_POSTGRESQL_USERNAME: ${{ secrets.TEST_AWS_POSTGRESQL_USERNAME }}
+
+          TEST_MYSQL_RUN_BASIC_SSL: "true"
+          TEST_POSTGRESQL_RUN_BASIC_SSL: "true"
+        run: pytest tests/test_connection_matrix.py::test_connection_matrix_aws -vv -s --maxfail=1
+
+  azure_ad:
+    name: Azure AD Matrix
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ODBC drivers
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl gnupg2 apt-transport-https unixodbc-dev
+          source /etc/os-release
+          curl -sSL -O https://packages.microsoft.com/config/ubuntu/${VERSION_ID}/packages-microsoft-prod.deb
+          sudo dpkg -i packages-microsoft-prod.deb
+          rm packages-microsoft-prod.deb
+          sudo apt-get update
+          sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18 odbc-postgresql odbc-mariadb
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r tests/requirements-test.txt
+
+      - name: Run Azure AD matrix tests
+        env:
+          RUN_AZURE_AD_MATRIX: ${{ vars.RUN_AZURE_AD_MATRIX }}
+          FASTAPI_AUTH_TOKEN: ${{ secrets.FASTAPI_AUTH_TOKEN }}
+
+          TEST_AZURE_TENANT_ID: ${{ secrets.TEST_AZURE_TENANT_ID }}
+          TEST_AZURE_CLIENT_ID: ${{ secrets.TEST_AZURE_CLIENT_ID }}
+          TEST_AZURE_CLIENT_SECRET: ${{ secrets.TEST_AZURE_CLIENT_SECRET }}
+
+          TEST_AZURE_POSTGRESQL_HOST: ${{ secrets.TEST_AZURE_POSTGRESQL_HOST }}
+          TEST_AZURE_POSTGRESQL_PORT: ${{ secrets.TEST_AZURE_POSTGRESQL_PORT }}
+          TEST_AZURE_POSTGRESQL_DATABASE: ${{ secrets.TEST_AZURE_POSTGRESQL_DATABASE }}
+          TEST_AZURE_POSTGRESQL_USERNAME: ${{ secrets.TEST_AZURE_POSTGRESQL_USERNAME }}
+          TEST_AZURE_POSTGRESQL_PASSWORD: ${{ secrets.TEST_AZURE_POSTGRESQL_PASSWORD }}
+
+          TEST_AZURE_SQLSERVER_HOST: ${{ secrets.TEST_AZURE_SQLSERVER_HOST }}
+          TEST_AZURE_SQLSERVER_PORT: ${{ secrets.TEST_AZURE_SQLSERVER_PORT }}
+          TEST_AZURE_SQLSERVER_DATABASE: ${{ secrets.TEST_AZURE_SQLSERVER_DATABASE }}
+          TEST_AZURE_SQLSERVER_USERNAME: ${{ secrets.TEST_AZURE_SQLSERVER_USERNAME }}
+          TEST_AZURE_SQLSERVER_PASSWORD: ${{ secrets.TEST_AZURE_SQLSERVER_PASSWORD }}
+          TEST_AZURE_SQLSERVER_NAMED_PIPE: ${{ secrets.TEST_AZURE_SQLSERVER_NAMED_PIPE }}
+          TEST_AZURE_SQLSERVER_AZURE_AD_USERNAME: ${{ secrets.TEST_AZURE_SQLSERVER_AZURE_AD_USERNAME }}
+          TEST_AZURE_SQLSERVER_AZURE_AD_PASSWORD: ${{ secrets.TEST_AZURE_SQLSERVER_AZURE_AD_PASSWORD }}
+          TEST_AZURE_SQLSERVER_AZURE_AD_MFA_USERNAME: ${{ secrets.TEST_AZURE_SQLSERVER_AZURE_AD_MFA_USERNAME }}
+
+          TEST_POSTGRESQL_HOST: ${{ secrets.TEST_AZURE_POSTGRESQL_HOST }}
+          TEST_POSTGRESQL_PORT: ${{ secrets.TEST_AZURE_POSTGRESQL_PORT }}
+          TEST_POSTGRESQL_DATABASE: ${{ secrets.TEST_AZURE_POSTGRESQL_DATABASE }}
+          TEST_POSTGRESQL_USERNAME: ${{ secrets.TEST_AZURE_POSTGRESQL_USERNAME }}
+          TEST_POSTGRESQL_PASSWORD: ${{ secrets.TEST_AZURE_POSTGRESQL_PASSWORD }}
+          TEST_POSTGRESQL_RUN_BASIC_SSL: "true"
+
+          TEST_SQLSERVER_HOST: ${{ secrets.TEST_AZURE_SQLSERVER_HOST }}
+          TEST_SQLSERVER_PORT: ${{ secrets.TEST_AZURE_SQLSERVER_PORT }}
+          TEST_SQLSERVER_DATABASE: ${{ secrets.TEST_AZURE_SQLSERVER_DATABASE }}
+          TEST_SQLSERVER_USERNAME: ${{ secrets.TEST_AZURE_SQLSERVER_USERNAME }}
+          TEST_SQLSERVER_PASSWORD: ${{ secrets.TEST_AZURE_SQLSERVER_PASSWORD }}
+          TEST_SQLSERVER_NAMED_PIPE: ${{ secrets.TEST_AZURE_SQLSERVER_NAMED_PIPE }}
+          TEST_POSTGRESQL_SSH_DB_HOST: ${{ secrets.TEST_AZURE_POSTGRESQL_HOST }}
+          TEST_SQLSERVER_SSH_DB_HOST: ${{ secrets.TEST_AZURE_SQLSERVER_HOST }}
+          TEST_SSH_HOST: ${{ secrets.TEST_AZURE_SSH_HOST }}
+          TEST_SSH_PORT: ${{ secrets.TEST_AZURE_SSH_PORT }}
+          TEST_SSH_USERNAME: ${{ secrets.TEST_AZURE_SSH_USERNAME }}
+          TEST_SSH_PASSWORD: ${{ secrets.TEST_AZURE_SSH_PASSWORD }}
+          TEST_SQLSERVER_RUN_TLS: "true"
+          TEST_SQLSERVER_AZURE_AD_USERNAME: ${{ secrets.TEST_AZURE_SQLSERVER_AZURE_AD_USERNAME }}
+          TEST_SQLSERVER_AZURE_AD_PASSWORD: ${{ secrets.TEST_AZURE_SQLSERVER_AZURE_AD_PASSWORD }}
+          TEST_SQLSERVER_AZURE_AD_MFA_USERNAME: ${{ secrets.TEST_AZURE_SQLSERVER_AZURE_AD_MFA_USERNAME }}
+          TEST_SQLSERVER_RUN_AZURE_AD_PASSWORD: ${{ vars.TEST_SQLSERVER_RUN_AZURE_AD_PASSWORD }}
+          TEST_SQLSERVER_RUN_AZURE_AD_INTEGRATED: ${{ vars.TEST_SQLSERVER_RUN_AZURE_AD_INTEGRATED }}
+          TEST_SQLSERVER_RUN_AZURE_AD_MFA: ${{ vars.TEST_SQLSERVER_RUN_AZURE_AD_MFA }}
+          TEST_SQLSERVER_RUN_AZURE_AD_MI: ${{ vars.TEST_SQLSERVER_RUN_AZURE_AD_MI }}
+          TEST_SQLSERVER_RUN_AZURE_AD_SSH: ${{ vars.TEST_SQLSERVER_RUN_AZURE_AD_SSH }}
+        run: pytest tests/test_connection_matrix.py::test_connection_matrix_azure_ad -q
+
+  kerberos_windows:
+    name: Kerberos/Windows Matrix
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -r tests/requirements-test.txt
+
+      - name: Run Kerberos/Windows matrix tests
+        shell: pwsh
+        env:
+          RUN_KERBEROS_WINDOWS_MATRIX: ${{ vars.RUN_KERBEROS_WINDOWS_MATRIX }}
+          FASTAPI_AUTH_TOKEN: ${{ secrets.FASTAPI_AUTH_TOKEN }}
+
+          TEST_KERBEROS_POSTGRESQL_HOST: ${{ secrets.TEST_KERBEROS_POSTGRESQL_HOST }}
+          TEST_KERBEROS_POSTGRESQL_PORT: ${{ secrets.TEST_KERBEROS_POSTGRESQL_PORT }}
+          TEST_KERBEROS_POSTGRESQL_DATABASE: ${{ secrets.TEST_KERBEROS_POSTGRESQL_DATABASE }}
+          TEST_KERBEROS_POSTGRESQL_USERNAME: ${{ secrets.TEST_KERBEROS_POSTGRESQL_USERNAME }}
+
+          TEST_KERBEROS_SQLSERVER_HOST: ${{ secrets.TEST_KERBEROS_SQLSERVER_HOST }}
+          TEST_KERBEROS_SQLSERVER_PORT: ${{ secrets.TEST_KERBEROS_SQLSERVER_PORT }}
+          TEST_KERBEROS_SQLSERVER_DATABASE: ${{ secrets.TEST_KERBEROS_SQLSERVER_DATABASE }}
+          TEST_KERBEROS_SQLSERVER_USERNAME: ${{ secrets.TEST_KERBEROS_SQLSERVER_USERNAME }}
+          TEST_KERBEROS_SQLSERVER_NAMED_PIPE: ${{ secrets.TEST_KERBEROS_SQLSERVER_NAMED_PIPE }}
+
+          TEST_POSTGRESQL_HOST: ${{ secrets.TEST_KERBEROS_POSTGRESQL_HOST }}
+          TEST_POSTGRESQL_PORT: ${{ secrets.TEST_KERBEROS_POSTGRESQL_PORT }}
+          TEST_POSTGRESQL_DATABASE: ${{ secrets.TEST_KERBEROS_POSTGRESQL_DATABASE }}
+          TEST_POSTGRESQL_USERNAME: ${{ secrets.TEST_KERBEROS_POSTGRESQL_USERNAME }}
+
+          TEST_SQLSERVER_HOST: ${{ secrets.TEST_KERBEROS_SQLSERVER_HOST }}
+          TEST_SQLSERVER_PORT: ${{ secrets.TEST_KERBEROS_SQLSERVER_PORT }}
+          TEST_SQLSERVER_DATABASE: ${{ secrets.TEST_KERBEROS_SQLSERVER_DATABASE }}
+          TEST_SQLSERVER_USERNAME: ${{ secrets.TEST_KERBEROS_SQLSERVER_USERNAME }}
+          TEST_SQLSERVER_NAMED_PIPE: ${{ secrets.TEST_KERBEROS_SQLSERVER_NAMED_PIPE }}
+        run: pytest tests/test_connection_matrix.py::test_connection_matrix_kerberos_windows -q

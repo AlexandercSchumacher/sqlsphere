@@ -1,0 +1,93 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sqlsphere-test-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: sqlsphere_mysql
+      MYSQL_USER: sqlsphere_user
+      MYSQL_PASSWORD: sqlsphere_mysql_pass
+      MYSQL_ROOT_PASSWORD: sqlsphere_root_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./certs/mysql:/etc/mysql/certs:ro
+      - ./mysql-run:/var/run/mysqld
+    command:
+      [
+        "--default-authentication-plugin=mysql_native_password",
+        "--socket=/var/run/mysqld/mysqld.sock",
+        "--ssl-ca=/etc/mysql/certs/ca.pem",
+        "--ssl-cert=/etc/mysql/certs/server-cert.pem",
+        "--ssl-key=/etc/mysql/certs/server-key.pem"
+      ]
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-usqlsphere_user", "-psqlsphere_mysql_pass"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  postgresql:
+    build:
+      context: .
+      dockerfile: postgresql-tls/Dockerfile
+    container_name: sqlsphere-test-postgresql
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: sqlsphere_pg
+      POSTGRES_USER: sqlsphere_pg
+      POSTGRES_PASSWORD: sqlsphere_pg_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgresql-run:/var/run/postgresql
+    command:
+      [
+        "postgres",
+        "-c",
+        "ssl=on",
+        "-c",
+        "ssl_ca_file=/etc/postgresql/certs/ca.pem",
+        "-c",
+        "ssl_cert_file=/etc/postgresql/certs/server-cert.pem",
+        "-c",
+        "ssl_key_file=/etc/postgresql/certs/server-key.pem",
+        "-c",
+        "unix_socket_directories=/var/run/postgresql"
+      ]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sqlsphere_pg -d sqlsphere_pg"]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+
+  sqlserver:
+    build:
+      context: .
+      dockerfile: sqlserver-tls/Dockerfile
+    container_name: sqlsphere-test-sqlserver
+    restart: unless-stopped
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Developer"
+      SA_PASSWORD: "SqlSphereStrongPass!123"
+    ports:
+      - "1433:1433"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools18/bin/sqlcmd -C -S localhost -U sa -P 'SqlSphereStrongPass!123' -Q 'SELECT 1' || exit 1"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+
+  ssh-bastion:
+    build:
+      context: .
+      dockerfile: ssh-bastion/Dockerfile
+    container_name: sqlsphere-test-ssh
+    restart: unless-stopped
+    ports:
+      - "2222:2222"

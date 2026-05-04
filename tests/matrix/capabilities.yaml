@@ -1,0 +1,47 @@
+database_capabilities:
+  mysql:
+    connection_methods: [standard, ssh, socket, pipe]
+    auth_methods: [sql_auth, ssl_cert, aws_iam, connection_string]
+    tls:
+      supports_use_ssl: true
+      ssl_modes: [disabled, preferred, required, verify_ca, verify_identity]
+      cert_fields_supported: true
+  postgresql:
+    connection_methods: [standard, ssh, socket]
+    auth_methods: [sql_auth, ssl_cert, aws_iam, azure_ad_password, azure_ad_sp, kerberos, connection_string]
+    tls:
+      supports_use_ssl: true
+      ssl_modes: [disable, allow, prefer, require, verify-ca, verify-full]
+      cert_fields_supported: true
+  sqlserver:
+    connection_methods: [standard, ssh, pipe]
+    auth_methods: [sql_auth, windows_auth, azure_ad_password, azure_ad_integrated, azure_ad_mfa, azure_ad_sp, azure_ad_mi, kerberos, connection_string]
+    tls:
+      supports_use_ssl: true
+      encrypt_values: [yes, no, strict]
+      trust_server_certificate_supported: true
+invalid_combinations:
+  - db_type: mysql
+    connection_method: socket
+    auth_method: windows_auth
+    reason: "MySQL does not support windows_auth."
+  - db_type: mysql
+    connection_method: standard
+    auth_method: azure_ad_password
+    reason: "MySQL does not support Azure AD auth modes."
+  - db_type: postgresql
+    connection_method: standard
+    auth_method: windows_auth
+    reason: "PostgreSQL does not support windows_auth in SQLSphere capabilities."
+  - db_type: postgresql
+    connection_method: pipe
+    auth_method: sql_auth
+    reason: "PostgreSQL does not support pipe connection method."
+  - db_type: sqlserver
+    connection_method: socket
+    auth_method: sql_auth
+    reason: "SQL Server does not support socket connection method."
+query_by_db:
+  mysql: "SELECT 1"
+  postgresql: "SELECT 1"
+  sqlserver: "SELECT 1"
