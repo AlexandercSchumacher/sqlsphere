@@ -16,6 +16,8 @@ import { useQueryHistory } from '@/hooks/useQueryHistory';
 import { SQLEditor } from '@/components/SQLEditor';
 import Layout from '@/components/Layout';
 import { AuthDialog } from '@/components/AuthDialog';
+import { ApiKeyDialog } from '@/components/ApiKeyDialog';
+import { buildLlmHeaders, hasAnyLlmKey, providerToActiveModel } from '@/lib/llmKeys';
 import { ConfirmActionModal } from '@/components/ConfirmActionModal';
 import { ConnectionDropdown } from '@/components/ConnectionDropdown';
 import { SchemaTree, SchemaNode } from '@/components/SchemaTree';
@@ -46,6 +48,7 @@ import {
   Layers,
   Check,
   Square,
+  KeyRound,
 } from 'lucide-react';
 
 // ChatMessage type is imported from useConnection
@@ -88,6 +91,9 @@ export default function ChatCursor() {
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
   const [activeModel, setActiveModel] = useState<'claude' | 'chatgpt'>('chatgpt');
+  const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(false);
+  const [apiKeyDialogReason, setApiKeyDialogReason] = useState<'missing' | 'manual' | 'auth-failed'>('manual');
+  const [pendingChatRetry, setPendingChatRetry] = useState<string | null>(null);
   
   // SQL Editor State - Multiple Query Files/Tabs
   const [queryFiles, setQueryFiles] = useState<Array<{
@@ -406,6 +412,20 @@ export default function ChatCursor() {
     setLoading(true);
 
     try {
+      // LOCAL_MODE: if no API key is configured anywhere (env var on the
+      // backend or a key pasted into localStorage), pop the key dialog
+      // before making the round-trip. The backend would just return
+      // AI_KEY_MISSING anyway; the dialog gives the user a clear path.
+      const llmHeaders = buildLlmHeaders();
+      if (!hasAnyLlmKey()) {
+        setLoading(false);
+        setMessages(prev => prev.slice(0, -1)); // pull the user message back; we'll re-send after save
+        setPendingChatRetry(inputValue);
+        setApiKeyDialogReason('missing');
+        setApiKeyDialogOpen(true);
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('database-proxy', {
         body: {
           endpoint: '/chat',
@@ -423,6 +443,7 @@ export default function ChatCursor() {
             cursor_line: cursorPosition?.line,
           } : undefined,
         },
+        headers: llmHeaders,
         signal: abortController.signal,
       });
 
@@ -439,12 +460,35 @@ export default function ChatCursor() {
         throw error;
       }
 
-      // Handle AI response
+      // Backend signals failure with success=false / mode="error". The
+      // previous code path would silently fall through to a misleading
+      // "Query executed successfully." message; check explicitly here.
+      if (data?.success === false || data?.mode === 'error') {
+        const errStr = typeof data?.error === 'string' ? data.error : '';
+        if (errStr.includes('AI_KEY_MISSING')) {
+          setMessages(prev => prev.slice(0, -1));
+          setPendingChatRetry(inputValue);
+          setApiKeyDialogReason('missing');
+          setApiKeyDialogOpen(true);
+          return;
+        }
+        const errorMessage: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          sessionId,
+          role: 'assistant',
+          content: data?.explanation || data?.error || 'AI request failed.',
+          timestamp: new Date(),
+        };
+        setMessages(prev => [...prev, errorMessage]);
+        return;
+      }
+
+      // Handle AI response (honest fallback, not a misleading success).
       const aiMessage: ChatMessage = {
         id: (Date.now() + 1).toString(),
         sessionId,
         role: 'assistant',
-        content: data.explanation || 'Query executed successfully.',
+        content: data?.explanation || 'AI processed your request.',
         timestamp: new Date(),
       };
 
@@ -1292,6 +1336,25 @@ export default function ChatCursor() {
   return (
     <Layout>
       <AuthDialog open={authDialogOpen} onOpenChange={setAuthDialogOpen} />
+      <ApiKeyDialog
+        open={apiKeyDialogOpen}
+        onOpenChange={(open) => {
+          setApiKeyDialogOpen(open);
+          if (!open) setPendingChatRetry(null);
+        }}
+        reason={apiKeyDialogReason}
+        onSaved={(provider) => {
+          // Sync the model selector with the provider the user just configured.
+          const mapped = providerToActiveModel(provider);
+          if (mapped) setActiveModel(mapped);
+          // If the dialog was triggered by a pending message, replay it.
+          // We just put it back into the input; the user can hit send again.
+          if (pendingChatRetry) {
+            setInputValue(pendingChatRetry);
+            setPendingChatRetry(null);
+          }
+        }}
+      />
       <ConfirmActionModal
         open={dmlConfirmOpen}
         onClose={handleDmlCancel}
@@ -1591,15 +1654,36 @@ export default function ChatCursor() {
             <div className="flex flex-col h-full overflow-hidden bg-background">
               <div className="flex items-center justify-between p-3 border-b flex-shrink-0 h-[52px]">
                 <h3 className="text-[10px] font-semibold">AI Assistant</h3>
-                <Select value={activeModel} onValueChange={(value: 'claude' | 'chatgpt') => setActiveModel(value)}>
-                  <SelectTrigger className="w-[140px] h-7 text-[9px]">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="claude">Claude Sonnet 4.5</SelectItem>
-                    <SelectItem value="chatgpt">GPT-5.2</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center gap-2">
+                  <Select value={activeModel} onValueChange={(value: 'claude' | 'chatgpt') => setActiveModel(value)}>
+                    <SelectTrigger className="w-[140px] h-7 text-[9px]">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="claude">Claude Sonnet 4.5</SelectItem>
+                      <SelectItem value="chatgpt">GPT-5.2</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => {
+                          setApiKeyDialogReason('manual');
+                          setApiKeyDialogOpen(true);
+                        }}
+                        aria-label="Manage AI API keys"
+                      >
+                        <KeyRound className="h-3.5 w-3.5" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      <p className="text-[10px]">Manage Anthropic / OpenAI API keys</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
               </div>
 
               {/* Messages */}

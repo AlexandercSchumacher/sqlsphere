@@ -64,7 +64,10 @@ const DEMO_SESSION = {
 // functions.invoke
 // ---------------------------------------------------------------------------
 
-async function invokeDatabaseProxy(body: Record<string, unknown>): Promise<SupabaseInvokeResult> {
+async function invokeDatabaseProxy(
+  body: Record<string, unknown>,
+  callerHeaders?: Record<string, string>,
+): Promise<SupabaseInvokeResult> {
   const endpoint = (body.endpoint as string | undefined) ?? "/";
   const { endpoint: _endpoint, method, ...rest } = body as Record<string, unknown> & { method?: string };
   const httpMethod = (method as string | undefined) ?? "POST";
@@ -75,7 +78,7 @@ async function invokeDatabaseProxy(body: Record<string, unknown>): Promise<Supab
   try {
     const init: RequestInit = {
       method: httpMethod,
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...(callerHeaders ?? {}) },
     };
     if (!isReadOnlyGet && Object.keys(rest).length > 0) {
       init.body = JSON.stringify(rest);
@@ -134,9 +137,10 @@ async function invokeManageConnection(body: Record<string, unknown>): Promise<Su
 const functions = {
   async invoke<T = unknown>(name: string, args: SupabaseInvokeArgs = {}): Promise<SupabaseInvokeResult<T>> {
     const body = (args.body ?? {}) as Record<string, unknown>;
+    const headers = args.headers;
 
     if (name === "database-proxy") {
-      return invokeDatabaseProxy(body) as Promise<SupabaseInvokeResult<T>>;
+      return invokeDatabaseProxy(body, headers) as Promise<SupabaseInvokeResult<T>>;
     }
     if (name === "manage-connection") {
       return invokeManageConnection(body) as Promise<SupabaseInvokeResult<T>>;

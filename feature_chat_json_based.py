@@ -831,25 +831,38 @@ def _build_comprehensive_prompt(
     return static_prompt + dynamic_sections
 
 
-def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = None, session_id: Optional[str] = None, active_model: Optional[str] = None, fastapi_request=None) -> str:
+def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = None, session_id: Optional[str] = None, active_model: Optional[str] = None, fastapi_request=None, anthropic_key_override: Optional[str] = None, openai_key_override: Optional[str] = None) -> str:
     """Call LLM with messages and optional prompt caching.
-    
+
     Args:
         messages: List of message dicts with 'role' and 'content'
         cache_control: Optional cache control parameter for prompt caching
                       - For OpenAI: Uses prompt_cache_retention and prompt_cache_key
                       - For Anthropic: "ephemeral" with cache_control on messages
         session_id: Optional session ID for schema hash comparison
+        anthropic_key_override: If set, use this key for Anthropic instead of the
+                                module-global client. Lets the user supply a key
+                                via the X-Anthropic-Key header from the browser.
+        openai_key_override: Same idea for OpenAI via X-OpenAI-Key.
     """
     import logging
     logger = logging.getLogger(__name__)
-    
+
     # Use active_model parameter if provided, otherwise fall back to ACTIVE_MODEL env var
     model_to_use = (active_model or ACTIVE_MODEL).lower()
-    
+
     if model_to_use == "chatgpt":
-        if not openai_client:
-            raise RuntimeError("OPENAI_API_KEY is not set.")
+        # Per-request override beats the module-level client.
+        if openai_key_override:
+            try:
+                import openai as _openai_mod
+                request_client = _openai_mod.OpenAI(api_key=openai_key_override)
+            except Exception as exc:
+                raise RuntimeError(f"AI_KEY_MISSING: failed to init OpenAI client with override key: {exc}")
+        else:
+            request_client = openai_client
+        if not request_client:
+            raise RuntimeError("AI_KEY_MISSING: OPENAI_API_KEY is not set. Provide it via env var or the X-OpenAI-Key header.")
         
         # Build request with prompt caching support
         request_params = {
@@ -925,7 +938,7 @@ def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = Non
                     if "prompt_cache_key" in request_params:
                         responses_params["prompt_cache_key"] = request_params["prompt_cache_key"]
                     
-                    response = openai_client.responses.create(**responses_params)
+                    response = request_client.responses.create(**responses_params)
                 except (TypeError, AttributeError) as cache_error:
                     # If cache parameters are not supported, try without them
                     if "prompt_cache" in str(cache_error).lower() or "unexpected keyword" in str(cache_error).lower():
@@ -934,7 +947,7 @@ def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = Non
                             "input": cleaned_messages,
                             "temperature": request_params.get("temperature", 0.3),
                         }
-                        response = openai_client.responses.create(**responses_params_no_cache)
+                        response = request_client.responses.create(**responses_params_no_cache)
                     else:
                         api_error = cache_error
                 except Exception as e:
@@ -962,7 +975,7 @@ def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = Non
             def make_chat_completions_call():
                 nonlocal response, api_error
                 try:
-                    response = openai_client.chat.completions.create(**request_params)
+                    response = request_client.chat.completions.create(**request_params)
                 except Exception as fallback_error:
                     error_msg = str(fallback_error)
                     
@@ -975,7 +988,7 @@ def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = Non
                             "messages": cleaned_messages
                         }
                         try:
-                            response = openai_client.chat.completions.create(**request_params_fallback)
+                            response = request_client.chat.completions.create(**request_params_fallback)
                         except Exception as e:
                             api_error = e
                     else:
@@ -1004,7 +1017,7 @@ def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = Non
             def make_chat_completions_call():
                 nonlocal response, api_error
                 try:
-                    response = openai_client.chat.completions.create(**request_params)
+                    response = request_client.chat.completions.create(**request_params)
                 except Exception as fallback_error:
                     error_msg = str(fallback_error)
                     
@@ -1015,7 +1028,7 @@ def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = Non
                             "messages": cleaned_messages
                         }
                         try:
-                            response = openai_client.chat.completions.create(**request_params_fallback)
+                            response = request_client.chat.completions.create(**request_params_fallback)
                         except Exception as e:
                             api_error = e
                     else:
@@ -1173,8 +1186,17 @@ def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = Non
         raise RuntimeError(f"Unexpected response format from OpenAI API: {response_type}. Could not extract content.")
     
     elif model_to_use == "claude":
-        if not anthropic_client:
-            raise RuntimeError("ANTHROPIC_API_KEY is not set or anthropic library not installed.")
+        # Per-request override beats the module-level client.
+        if anthropic_key_override:
+            try:
+                import anthropic as _anthropic_mod
+                request_client = _anthropic_mod.Anthropic(api_key=anthropic_key_override)
+            except Exception as exc:
+                raise RuntimeError(f"AI_KEY_MISSING: failed to init Anthropic client with override key: {exc}")
+        else:
+            request_client = anthropic_client
+        if not request_client:
+            raise RuntimeError("AI_KEY_MISSING: ANTHROPIC_API_KEY is not set. Provide it via env var or the X-Anthropic-Key header.")
         
         # Claude format: system messages as array with cache_control support
         # According to Claude docs: cache_control should be on the LAST block of static content
@@ -1319,7 +1341,7 @@ def _call_llm(messages: List[Dict[str, str]], cache_control: Optional[str] = Non
         if system_messages:
             request_params["system"] = system_messages
         
-        response = anthropic_client.messages.create(**request_params)
+        response = request_client.messages.create(**request_params)
         
         # Log cache usage from response if available
         if hasattr(response, 'usage'):
@@ -1395,7 +1417,9 @@ def execute_query_json_based(
     active_model: Optional[str] = None,
     current_editor_code: Optional[str] = None,
     code_context_metadata: Optional[Dict[str, Any]] = None,
-    fastapi_request=None
+    fastapi_request=None,
+    anthropic_key_override: Optional[str] = None,
+    openai_key_override: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     JSON-based query execution.
@@ -1521,8 +1545,16 @@ Only use listed columns!"""
         # Enable prompt caching for the static system prompt (first message)
         # Cache control: "ephemeral" means cache until invalidated or expires
         # Pass session_id for schema hash comparison and active_model for LLM selection
-        llm_response = _call_llm(messages, cache_control="ephemeral", session_id=session_id, active_model=active_model, fastapi_request=fastapi_request)
-        
+        llm_response = _call_llm(
+            messages,
+            cache_control="ephemeral",
+            session_id=session_id,
+            active_model=active_model,
+            fastapi_request=fastapi_request,
+            anthropic_key_override=anthropic_key_override,
+            openai_key_override=openai_key_override,
+        )
+
         # Debug: Log the raw response to understand what we're getting
         if not llm_response or len(llm_response.strip()) == 0:
             logger.error(f"LLM returned empty response. Response type: {type(llm_response)}, Value: {repr(llm_response)}")
@@ -1531,11 +1563,21 @@ Only use listed columns!"""
     except Exception as e:
         import traceback
         error_trace = traceback.format_exc()
+        # Surface a clear AI_KEY_MISSING marker so the frontend can pop the
+        # "paste your API key" dialog instead of misreporting success.
+        err_text = str(e)
+        is_key_missing = "AI_KEY_MISSING" in err_text
         return {
             "success": False,
             "mode": "error",
-            "error": f"Error calling LLM: {str(e)}",
-            "debug_error": error_trace
+            "error": "AI_KEY_MISSING" if is_key_missing else f"Error calling LLM: {err_text}",
+            "explanation": (
+                "No AI API key is configured. Click the key icon and paste an Anthropic or OpenAI key, or set ANTHROPIC_API_KEY / OPENAI_API_KEY in your shell before running docker compose up."
+                if is_key_missing
+                else f"AI request failed: {err_text}"
+            ),
+            "provider": (active_model or ACTIVE_MODEL),
+            "debug_error": error_trace,
         }
     
     # Parse JSON response

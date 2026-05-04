@@ -717,6 +717,22 @@ def chat_query(request: QueryRequest = Body(...), fastapi_request: Request = Non
     }
     """
     try:
+        # Per-request LLM key override. The frontend stores user-supplied
+        # Anthropic / OpenAI keys in localStorage and forwards them via these
+        # headers, so a recruiter can paste a key into the UI without
+        # restarting docker compose with new env vars.
+        anthropic_key_override = None
+        openai_key_override = None
+        if fastapi_request is not None:
+            anthropic_key_override = (
+                fastapi_request.headers.get("x-anthropic-key")
+                or fastapi_request.headers.get("X-Anthropic-Key")
+            )
+            openai_key_override = (
+                fastapi_request.headers.get("x-openai-key")
+                or fastapi_request.headers.get("X-OpenAI-Key")
+            )
+
         # Note: is_disconnected can be unreliable, so we only check it at the endpoint level
         # and let the actual cancellation happen through the AbortController in the frontend
         result = execute_query(
@@ -727,9 +743,11 @@ def chat_query(request: QueryRequest = Body(...), fastapi_request: Request = Non
             active_model=request.active_model,  # Pass model selection
             current_editor_code=getattr(request, 'current_editor_code', None),
             code_context_metadata=getattr(request, 'code_context_metadata', None),
-            fastapi_request=fastapi_request  # Pass request for potential future cancellation checks
+            fastapi_request=fastapi_request,  # Pass request for potential future cancellation checks
+            anthropic_key_override=anthropic_key_override,
+            openai_key_override=openai_key_override,
         )
-        
+
         return result
     
     except HTTPException:
